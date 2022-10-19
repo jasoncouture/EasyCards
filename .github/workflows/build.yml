@@ -40,6 +40,7 @@ jobs:
       - name: Upload EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
         uses: actions/upload-artifact@v3
         with:
+          name: EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
           path: EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
         
         
