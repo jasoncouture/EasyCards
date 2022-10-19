@@ -1,3 +1,5 @@
+using RogueGenesia.Data;
+
 namespace EasyCards;
 
 public class ModifierTemplate
