@@ -1,0 +1,98 @@
+{
+  "ModSource": "EasyCards",
+  "Stats": [
+    {
+      "Name": "Gigantism",
+      "TexturePath": "placeholder.png",
+      "Rarity": "Epic",
+      "Tags": [
+        "Body",
+        "Might"
+      ],
+      "DropWeight": 0.1,
+      "LevelUpWeight": 9999,
+      "MaxLevel": 3,
+      "Modifiers": [
+        {
+          "ModifierValue": 100.00,
+          "ModifierType": "Additional",
+          "Stat": "MaxHealth"
+        },
+        {
+          "ModifierValue": 1.15,
+          "ModifierType": "Compound",
+          "Stat": "ProjectileSize"
+        },
+        {
+          "ModifierValue": 0.90,
+          "ModifierType": "Compound",
+          "Stat": "MoveSpeed"
+        }
+      ],
+      "NameLocalization": {
+        "en": "Gigantism",
+        "fr": "Gigantisme",
+        "de": "Gigantismus"
+      }
+    },
+    {
+      "Name": "TakeAim",
+      "TexturePath": "placeholder.png",
+      "Rarity": "Rare",
+      "Tags": [
+        "Might"
+      ],
+      "DropWeight": 9999,
+      "LevelUpWeight": 9999,
+      "MaxLevel": 4,
+      "Modifiers": [
+        {
+          "ModifierValue": 1.20,
+          "ModifierType": "Compound",
+          "Stat": "ProjectileSpeed"
+        },
+        {
+          "ModifierValue": 1.15,
+          "ModifierType": "Compound",
+          "Stat": "Damage"
+        }
+      ],
+      "RequiresAny": [ "Stats_Gigantism" ],
+      "NameLocalization": {
+        "en": "Take Aim"
+      }
+    },
+    {
+      "Name": "SharpShot",
+      "TexturePath": "placeholder.png",
+      "Rarity": "Epic",
+      "Tags": [
+        "Might"
+      ],
+      "DropWeight": 9999,
+      "LevelUpWeight": 9999,
+      "MaxLevel": 4,
+      "Modifiers": [
+        {
+          "ModifierValue": 1.10,
+          "ModifierType": "Compound",
+          "Stat": "CriticalChance"
+        },
+        {
+          "ModifierValue": 1.10,
+          "ModifierType": "Compound",
+          "Stat": "CriticalMultiplier"
+        },
+        {
+          "ModifierValue": 0.05,
+          "ModifierType": "Additional",
+          "Stat": "KnockBack"
+        }
+      ],
+      "RequiresAll": [ "Stats_Gigantism", "Stats_TakeAim" ],
+      "NameLocalization": {
+        "en": "Sharp Shot"
+      }
+    }
+  ]
+}
