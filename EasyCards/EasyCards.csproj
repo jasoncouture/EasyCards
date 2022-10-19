@@ -67,4 +67,14 @@
     <!-- the compiler will copy these, since they're referenced -->
     <None Include="../Libraries/**/*" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" LinkBase="Libraries" />
   </ItemGroup>
+  
+  <Target Name="PostPublishCleanup" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName).dll" />
+      <FilesToDelete Include="$(PublishDir)*.pdb" />
+      <FilesToDelete Include="$(PublishDir)*.deps.json" />
+    </ItemGroup>
+    <Message Text="Deleting Files @(FilesToDelete) from publish output" Importance="high" />
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
 </Project>
