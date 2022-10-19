@@ -3,12 +3,6 @@ using RogueGenesia.Data;
 
 namespace EasyCards
 {
-    public class TemplateFile
-    {
-        public string ModSource { get; set; }
-        public List<CardTemplate> Stats { get; set; } = new();
-    }
-
     public class CardTemplate
     {
         public string Name { get; set; }
@@ -35,20 +29,6 @@ namespace EasyCards
         public override string ToString()
         {
             return $"{nameof(Name)}: {Name}, {nameof(TexturePath)}: {TexturePath}, {nameof(Rarity)}: {Rarity}, {nameof(Tags)}: {Tags}, {nameof(DropWeight)}: {DropWeight}, {nameof(LevelUpWeight)}: {LevelUpWeight}, {nameof(MaxLevel)}: {MaxLevel}, {nameof(Modifiers)}: {Modifiers}";
-        }
-    }
-
-    public class ModifierTemplate
-    {
-        public float ModifierValue { get; set; }
-
-        public ModifierType ModifierType { get; set; }
-
-        public StatsType Stat { get; set; }
-
-        public override string ToString()
-        {
-            return $"{nameof(ModifierValue)}: {ModifierValue}, {nameof(ModifierType)}: {ModifierType}, {nameof(Stat)}: {Stat}";
         }
     }
 }
