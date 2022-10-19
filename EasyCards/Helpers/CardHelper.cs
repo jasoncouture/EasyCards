@@ -15,8 +15,8 @@ namespace EasyCards.Helpers
 {
     public static class CardHelper
     {
-        private static ManualLogSource l = EasyCards.Log;
-        private static JsonSerializer _jsonSerializer = new();
+        private static ManualLogSource s_log = EasyCards.Log;
+        private static JsonSerializer s_jsonSerializer = new();
 
         public static ImmutableList<SoulCardScriptableObject> GetAllCards()
         {
@@ -34,57 +34,57 @@ namespace EasyCards.Helpers
 
             foreach (var card in cardBonus)
             {
-                logCard(card);
+                LogCard(card);
             }
         }
 
-        private static void logCard(SoulCardScriptableObject card)
+        private static void LogCard(SoulCardScriptableObject card)
         {
-            l.LogInfo($"=== Card: {card.GetLocalizationName} =============================");
-            l.LogInfo($"ID: {card.ID}");
-            l.LogInfo($"Texture: {card.Texture}");
-            l.LogInfo($"Unlocked: {card.Unlocked}");
-            l.LogInfo($"canBeUnlocked: {card.canBeUnlocked}");
-            l.LogInfo($"DropWeight: {card.DropWeight}");
-            l.LogInfo($"MaxLevel: {card.MaxLevel}");
-            l.LogInfo($"SoulRarity: {card.SoulRarity}");
-            l.LogInfo($"WeaponType: {card.WeaponType}");
-            l.LogInfo($"LevelUpWeight: {card.LevelUpWeight}");
-            l.LogInfo($"ModifyPlayerStat: {card.ModifyPlayerStat}");
-            l.LogInfo($"SoulCardTags: {card.SoulCardTags}");
-            l.LogInfo($"SoulCardType: {card.SoulCardType}");
-            l.LogInfo($"CardRequirementOnEverylevel: {card.CardRequirementOnEverylevel}");
-            l.LogInfo($"UnlockedByDefault: {card.UnlockedByDefault}");
-            l.LogInfo($"OverrideWeaponType: {card.OverrideWeaponType}");
-            l.LogInfo($"CardRequirement: {card.CardRequirement}");
-            l.LogInfo($"CardRequirement: {card.CardRequirement}");
-            l.LogInfo($"StatsModifier:");
-            logStatsModifier(card.StatsModifier);
+            s_log.LogInfo($"=== Card: {card.GetLocalizationName} =============================");
+            s_log.LogInfo($"ID: {card.ID}");
+            s_log.LogInfo($"Texture: {card.Texture}");
+            s_log.LogInfo($"Unlocked: {card.Unlocked}");
+            s_log.LogInfo($"canBeUnlocked: {card.canBeUnlocked}");
+            s_log.LogInfo($"DropWeight: {card.DropWeight}");
+            s_log.LogInfo($"MaxLevel: {card.MaxLevel}");
+            s_log.LogInfo($"SoulRarity: {card.SoulRarity}");
+            s_log.LogInfo($"WeaponType: {card.WeaponType}");
+            s_log.LogInfo($"LevelUpWeight: {card.LevelUpWeight}");
+            s_log.LogInfo($"ModifyPlayerStat: {card.ModifyPlayerStat}");
+            s_log.LogInfo($"SoulCardTags: {card.SoulCardTags}");
+            s_log.LogInfo($"SoulCardType: {card.SoulCardType}");
+            s_log.LogInfo($"CardRequirementOnEverylevel: {card.CardRequirementOnEverylevel}");
+            s_log.LogInfo($"UnlockedByDefault: {card.UnlockedByDefault}");
+            s_log.LogInfo($"OverrideWeaponType: {card.OverrideWeaponType}");
+            s_log.LogInfo($"CardRequirement: {card.CardRequirement}");
+            s_log.LogInfo($"CardRequirement: {card.CardRequirement}");
+            s_log.LogInfo($"StatsModifier:");
+            LogStatsModifier(card.StatsModifier);
         }
 
-        private static void logStatsModifier(StatsModifier statsMod)
+        private static void LogStatsModifier(StatsModifier statsMod)
         {
             for (var i = 0; i < statsMod.ModifiersList.Count; i++)
             {
                 var modifier = statsMod.ModifiersList[i];
-                l.LogInfo($"Modifier: {i}");
-                logStatModifier(modifier);
+                s_log.LogInfo($"Modifier: {i}");
+                LogStatModifier(modifier);
             }
         }
 
-        private static void logStatModifier(StatModifier modifier)
+        private static void LogStatModifier(StatModifier modifier)
         {
-            l.LogInfo($"\tKey: {modifier.Key}");
-            logSingularModifier(modifier.Value);
+            s_log.LogInfo($"\tKey: {modifier.Key}");
+            LOGSingularModifier(modifier.Value);
         }
 
-        private static void logSingularModifier(SingularModifier modifier)
+        private static void LOGSingularModifier(SingularModifier modifier)
         {
-            l.LogInfo($"\tValue: {modifier.Value}");
-            l.LogInfo($"\tModifierType: {modifier.ModifierType}");
+            s_log.LogInfo($"\tValue: {modifier.Value}");
+            s_log.LogInfo($"\tModifierType: {modifier.ModifierType}");
         }
 
-        private static UnityEngine.Localization.Locale getLocaleForKey(string localizationKey)
+        private static UnityEngine.Localization.Locale GetLocaleForKey(string localizationKey)
         {
             foreach (var locale in ModGenesia.ModGenesia.GetLocales())
             {
@@ -101,15 +101,15 @@ namespace EasyCards.Helpers
         {
             if (!File.Exists(fileName))
             {
-                l.LogError($"File does not exist: {fileName}");
+                s_log.LogError($"File does not exist: {fileName}");
             }
 
-            l.LogInfo($"Loading cards from file {fileName}");
+            s_log.LogInfo($"Loading cards from file {fileName}");
 
             var json = File.ReadAllText(fileName);
-            var templateFile = _jsonSerializer.Deserialize<TemplateFile>(json);
+            var templateFile = s_jsonSerializer.Deserialize<TemplateFile>(json);
 
-            l.LogInfo($"Loaded {templateFile.Stats.Count} cards");
+            s_log.LogInfo($"Loaded {templateFile.Stats.Count} cards");
 
             var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
 
@@ -119,14 +119,14 @@ namespace EasyCards.Helpers
             {
                 try
                 {
-                    var soulCardData = convertCardTemplate(modSource, cardTemplate);
-                    l.LogInfo($"\tAdding card {cardTemplate.Name}");
+                    var soulCardData = ConvertCardTemplate(modSource, cardTemplate);
+                    s_log.LogInfo($"\tAdding card {cardTemplate.Name}");
                     ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
                     successFullyAddedCards.Add($"Stats_{cardTemplate.Name}", cardTemplate);
                 }
                 catch (Exception ex)
                 {
-                    l.LogInfo($"Error adding {cardTemplate.Name}: {ex}");
+                    s_log.LogInfo($"Error adding {cardTemplate.Name}: {ex}");
                 }
             }
 
@@ -169,9 +169,9 @@ namespace EasyCards.Helpers
             return result;
         }
 
-        private static SoulCardCreationData convertCardTemplate(string modSource, CardTemplate cardTemplate)
+        private static SoulCardCreationData ConvertCardTemplate(string modSource, CardTemplate cardTemplate)
         {
-            l.LogInfo($"Converting {cardTemplate.Name}");
+            s_log.LogInfo($"Converting {cardTemplate.Name}");
             var soulCardData = new SoulCardCreationData();
 
             soulCardData.ModSource = modSource;
@@ -180,7 +180,7 @@ namespace EasyCards.Helpers
 
             var sprite = SpriteHelper.LoadSpriteFromFile(texturePath);
 
-            l.LogInfo($"\tSprite loaded: {sprite != null}");
+            s_log.LogInfo($"\tSprite loaded: {sprite != null}");
             soulCardData.Texture = sprite;
 
             soulCardData.Rarity = cardTemplate.Rarity;
@@ -192,14 +192,14 @@ namespace EasyCards.Helpers
             soulCardData.LevelUpWeight = cardTemplate.LevelUpWeight;
             soulCardData.MaxLevel = cardTemplate.MaxLevel;
 
-            l.LogInfo($"\tLoading localizations");
+            s_log.LogInfo($"\tLoading localizations");
             foreach (var (localizationKey, translation) in cardTemplate.NameLocalization)
             {
-                var locale = getLocaleForKey(localizationKey);
+                var locale = GetLocaleForKey(localizationKey);
 
                 if (locale == null)
                 {
-                    l.LogError($"\tLocale {localizationKey} not supported!");
+                    s_log.LogError($"\tLocale {localizationKey} not supported!");
                     continue;
                 }
 
@@ -209,7 +209,7 @@ namespace EasyCards.Helpers
                     Value = translation
                 };
 
-                l.LogInfo($"\tAdding {cardTemplate.Name} translation for {locale.Identifier.Code}: {translation}");
+                s_log.LogInfo($"\tAdding {cardTemplate.Name} translation for {locale.Identifier.Code}: {translation}");
 
                 soulCardData.NameOverride.Add(ld);
             }
@@ -237,7 +237,7 @@ namespace EasyCards.Helpers
             return soulCardData;
         }
 
-        private static Il2CppReferenceArray<SoulCardScriptableObject> findCardsByLocalizationName(
+        private static Il2CppReferenceArray<SoulCardScriptableObject> FindCardsByLocalizationName(
             ImmutableList<SoulCardScriptableObject> existingCards, List<string> cards)
         {
             var foundCards = existingCards.Where(card => cards.Contains(card.GetLocalizationName)).ToArray();
@@ -246,7 +246,7 @@ namespace EasyCards.Helpers
 
         public static void LogCardWeights()
         {
-            l.LogInfo($"Current card weights:");
+            s_log.LogInfo($"Current card weights:");
             
             var cards = from card in GetAllCards()
                 orderby card.SoulRarity 
@@ -258,12 +258,12 @@ namespace EasyCards.Helpers
             {
                 if (card.SoulRarity != lastRarity)
                 {
-                    l.LogInfo($"");
-                    l.LogInfo($"***{card.SoulRarity.ToString()} cards:***");
+                    s_log.LogInfo($"");
+                    s_log.LogInfo($"***{card.SoulRarity.ToString()} cards:***");
                     lastRarity = card.SoulRarity;
                 }
                 
-                l.LogInfo($"{card.GetLocalizationName}: [Drop: {card.DropWeight}, LevelUp: {card.LevelUpWeight}]");
+                s_log.LogInfo($"{card.GetLocalizationName}: [Drop: {card.DropWeight}, LevelUp: {card.LevelUpWeight}]");
             }
         }
 
@@ -278,7 +278,7 @@ namespace EasyCards.Helpers
                 }
                 catch (Exception ex)
                 {
-                    l.LogError($"Unable to load cards from file {jsonFile}: {ex}");
+                    s_log.LogError($"Unable to load cards from file {jsonFile}: {ex}");
                 }
             }
         }
