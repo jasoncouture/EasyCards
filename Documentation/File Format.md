@@ -4,6 +4,7 @@
 
 ```json
 {
+  "ModSource": "Your Mod Name",
   "Stats": [
     {
       "Name": "Gigantism",
@@ -43,17 +44,13 @@
 }
 ```
 
+### ModSource
+
+If provided, will set the `ModSource` value on all your cards to this value. If it is not provided, it will default to `EasyCards`.
+
 ### Stats
 
 Contains a list of cards that modify `Stats`. Each entry has the following options:
-
-#### Name
-
-Internal name of the card
-
-#### TexturePath
-
-The path to the file to load for the image
 
 | Element            | Meaning                                                                                                                | Notes                                                                                                                                                                                                                                                                        |
 |--------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
