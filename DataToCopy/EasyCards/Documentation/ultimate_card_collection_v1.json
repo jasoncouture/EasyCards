@@ -2,6 +2,30 @@
   "ModSource": "EasyCards",
   "Stats": [
     {
+      "Name": "SliceNVoid",
+      "TexturePath": "placeholder.png",
+      "Rarity": "Epic",
+      "Tags": [
+        "Body",
+        "Might"
+      ],
+      "DropWeight": 9999,
+      "LevelUpWeight": 9999,
+      "MaxLevel": 1,
+      "Modifiers": [
+        {
+          "ModifierValue": 1.00,
+          "ModifierType": "Additional",
+          "Stat": "MaxHealth"
+        }
+      ],
+      "NameLocalization": {
+        "en": "Slice'n'Void"
+      },
+      "BanishesCardNames": [ "Bow","Cleave","MagicWand","Shuriken","Spear","Kunai","Pike","ThunderStaff","EvilRing","ShamanStaff","Swordrang","Thorn","CrossBow","FireRing","ArcanistStaff","FireKatana"],
+      "BanishesCardsWithStatModifiers": [ "CriticalMultiplier", "CriticalChance" ]
+    },
+    {
       "Name": "Gigantism",
       "TexturePath": "placeholder.png",
       "Rarity": "Epic",
@@ -9,7 +33,7 @@
         "Body",
         "Might"
       ],
-      "DropWeight": 0.1,
+      "DropWeight": 9999,
       "LevelUpWeight": 9999,
       "MaxLevel": 3,
       "Modifiers": [

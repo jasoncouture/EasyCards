@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace EasyCards;
+namespace EasyCards.Templates;
 
 public class TemplateFile
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RogueGenesia.Data;
 
-namespace EasyCards
+namespace EasyCards.Templates
 {
     public class CardTemplate
     {
@@ -17,7 +17,8 @@ namespace EasyCards
         public List<ModifierTemplate> Modifiers { get; set; } = new();
         public Dictionary<string, string> NameLocalization { get; set; }
 
-        public List<string> BanishesCards { get; set; } = new();
+        public List<string> BanishesCardNames { get; set; } = new();
+        public List<StatsType> BanishesCardsWithStatModifiers { get; set; } = new();
         public List<string> RemovesCards { get; set; } = new();
         public List<string> RequiresAny { get; set; } = new();
         public List<string> RequiresAll { get; set; } = new();

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BepInEx.Logging;
-using Cpp2IL.Core.Analysis.PostProcessActions;
+using EasyCards.Templates;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSystem.Reflection;
 using ModGenesia;
 using RogueGenesia.Data;
 
@@ -18,6 +16,26 @@ namespace EasyCards.Helpers
         private static ManualLogSource s_log = EasyCards.Log;
         private static JsonSerializer s_jsonSerializer = new();
 
+        private static Dictionary<string, List<SoulCardScriptableObject>> GetAllCardsByStatsType()
+        {
+            var result = new Dictionary<string, List<SoulCardScriptableObject>>();
+
+            foreach (var card in GetAllCards())
+            {
+                foreach (var modifier in card.StatsModifier.ModifiersList)
+                {
+                    if (!result.ContainsKey(modifier.Key))
+                    {
+                        result[modifier.Key] = new();
+                    }
+
+                    result[modifier.Key].Add(card);
+                }
+            }
+
+            return result;
+        }
+        
         public static ImmutableList<SoulCardScriptableObject> GetAllCards()
         {
             return GameData.GetAllSoulBonus().ToImmutableList();
@@ -25,7 +43,7 @@ namespace EasyCards.Helpers
 
         public static Dictionary<string, SoulCardScriptableObject> GetAllCardsAsDictionary()
         {
-            return GetAllCards().ToDictionary(card => card.GetLocalizationName);
+            return GetAllCards().ToDictionary(card => card.name);
         }
 
         public static void LogCards()
@@ -40,7 +58,7 @@ namespace EasyCards.Helpers
 
         private static void LogCard(SoulCardScriptableObject card)
         {
-            s_log.LogInfo($"=== Card: {card.GetLocalizationName} =============================");
+            s_log.LogInfo($"=== Card: {card.name} =============================");
             s_log.LogInfo($"ID: {card.ID}");
             s_log.LogInfo($"Texture: {card.Texture}");
             s_log.LogInfo($"Unlocked: {card.Unlocked}");
@@ -122,7 +140,7 @@ namespace EasyCards.Helpers
                     var soulCardData = ConvertCardTemplate(modSource, cardTemplate);
                     s_log.LogInfo($"\tAdding card {cardTemplate.Name}");
                     ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
-                    successFullyAddedCards.Add($"Stats_{cardTemplate.Name}", cardTemplate);
+                    successFullyAddedCards.Add(cardTemplate.Name, cardTemplate);
                 }
                 catch (Exception ex)
                 {
@@ -130,27 +148,61 @@ namespace EasyCards.Helpers
                 }
             }
 
-            // PostProcess(successFullyAddedCards);
+            PostProcess(successFullyAddedCards);
         }
 
         private static void PostProcess(Dictionary<string,CardTemplate> successFullyAddedCards)
         {
+            s_log.LogInfo($"Post processing {successFullyAddedCards.Count} cards");
+            
             var allCards = GetAllCardsAsDictionary();
             var addedCardNames = successFullyAddedCards.Keys.ToList();
+            var statToCardMap = GetAllCardsByStatsType();
             
             foreach (var cardName in addedCardNames)
             {
+                s_log.LogInfo($"Processing {cardName}");
                 var cardTemplate = successFullyAddedCards[cardName];
                 var cardScso = allCards[cardName];
-                
-                if (cardTemplate == null || cardScso == null) continue;
 
-                var banishedCards = GetCardsForIdentifiers(allCards, cardTemplate.BanishesCards);
-                cardScso.CardExclusion = new Il2CppReferenceArray<SoulCardScriptableObject>(banishedCards.ToArray());
+                if (cardTemplate == null || cardScso == null)
+                {
+                    s_log.LogInfo($"Template and SCSO are null! bailing!");
+                    continue;
+                }
+
+                var explicitlyBanishedCards = GetCardsForIdentifiers(allCards, cardTemplate.BanishesCardNames);
+                
+                s_log.LogInfo($"Explicitly banished cards: {explicitlyBanishedCards.Count}");
+                
+                var banishedCardsByStat = GetCardsWithStatModifiers(statToCardMap, cardTemplate.BanishesCardsWithStatModifiers);
+                s_log.LogInfo($"Banished cards by stat: {banishedCardsByStat.Count}");
+
+                var finalList = new List<SoulCardScriptableObject>(explicitlyBanishedCards);
+                finalList.AddRange(banishedCardsByStat);
+
+                finalList = finalList.Distinct().ToList();
+                
+                s_log.LogInfo($"Final list of banished cards: {finalList.Count}");
+                cardScso.CardExclusion = new Il2CppReferenceArray<SoulCardScriptableObject>(finalList.ToArray());
 
                 var cardsToRemove = GetCardsForIdentifiers(allCards, cardTemplate.RemovesCards);
                 cardScso.CardToRemove = new Il2CppReferenceArray<SoulCardScriptableObject>(cardsToRemove.ToArray());
             }
+        }
+        
+        private static List<SoulCardScriptableObject> GetCardsWithStatModifiers(
+            Dictionary<string, List<SoulCardScriptableObject>> statToCardsMap, List<StatsType> modifiersToCheck)
+        {
+            var result = new List<SoulCardScriptableObject>();
+
+            foreach (var modifier in modifiersToCheck)
+            {
+                var cardsForModifier = statToCardsMap[modifier.ToString()];
+                result.AddRange(cardsForModifier);
+            }
+            
+            return result.Distinct().ToList();
         }
 
         private static List<SoulCardScriptableObject> GetCardsForIdentifiers(
@@ -159,7 +211,7 @@ namespace EasyCards.Helpers
             var result = new List<SoulCardScriptableObject>();
             foreach (var cardToGet in cardsToGet)
             {
-                var cardScso = allCards[cardToGet];
+                var cardScso = allCards.GetValueOrDefault(cardToGet);
                 if (cardScso != null)
                 {
                     result.Add(cardScso);
@@ -237,13 +289,6 @@ namespace EasyCards.Helpers
             return soulCardData;
         }
 
-        private static Il2CppReferenceArray<SoulCardScriptableObject> FindCardsByLocalizationName(
-            ImmutableList<SoulCardScriptableObject> existingCards, List<string> cards)
-        {
-            var foundCards = existingCards.Where(card => cards.Contains(card.GetLocalizationName)).ToArray();
-            return new Il2CppReferenceArray<SoulCardScriptableObject>(foundCards);
-        }
-
         public static void LogCardWeights()
         {
             s_log.LogInfo($"Current card weights:");
@@ -263,7 +308,7 @@ namespace EasyCards.Helpers
                     lastRarity = card.SoulRarity;
                 }
                 
-                s_log.LogInfo($"{card.GetLocalizationName}: [Drop: {card.DropWeight}, LevelUp: {card.LevelUpWeight}]");
+                s_log.LogInfo($"{card.name}: [Drop: {card.DropWeight}, LevelUp: {card.LevelUpWeight}]");
             }
         }
 
