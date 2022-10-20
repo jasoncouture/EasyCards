@@ -60,8 +60,7 @@
 
   <ItemGroup>
     <!-- Content to copy -->
-    <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" LinkBase="DataToCopy" />
-    <Content Include="../Documentation/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" LinkBase="Documentation" />
+    <Content Include="../DataToCopy/EasyCards/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" LinkBase="EasyCards" />
   </ItemGroup>
   <ItemGroup>
     <!-- the compiler will copy these, since they're referenced -->
@@ -74,7 +73,11 @@
       <FilesToDelete Include="$(PublishDir)*.pdb" />
       <FilesToDelete Include="$(PublishDir)*.deps.json" />
     </ItemGroup>
-    <Message Text="Deleting Files @(FilesToDelete) from publish output" Importance="high" />
+    <Message Text="Deleting references and debug symbols from publish output" Importance="high" />
     <Delete Files="@(FilesToDelete)" />
+  </Target>
+  <Target Name="CreateDataDirectory" AfterTargets="Publish">
+    <Message Text="Creating EasyCards/Data directory" Importance="high" />
+    <MakeDir Directories="$(PublishDir)EasyCards/Data" ContinueOnError="true" />
   </Target>
 </Project>
