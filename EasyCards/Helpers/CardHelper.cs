@@ -79,6 +79,7 @@ public static partial class CardHelper
 
         var allCards = GetAllCardsAsDictionary();
        
+        PostProcessDescriptions(allCards, successFullyAddedCards);
         PostProcessBanishes(allCards, successFullyAddedCards);
         PostProcessRemovals(allCards, successFullyAddedCards);
         PostProcessRequirements(allCards, successFullyAddedCards);
@@ -237,38 +238,25 @@ public static partial class CardHelper
         soulCardData.DropWeight = cardTemplate.DropWeight;
         soulCardData.LevelUpWeight = cardTemplate.LevelUpWeight;
         soulCardData.MaxLevel = cardTemplate.MaxLevel;
+        
+        soulCardData.StatsModifier = cardTemplate.CreateStatsModifier();
 
         if (cardTemplate.NameLocalization.Count > 0)
         {
-            s_log.LogInfo($"\tLoading localizations");
-            foreach (var (localizationKey, translation) in cardTemplate.NameLocalization)
+            var nameLocalizations = GetNameTranslations(cardTemplate);
+            foreach (var localization in nameLocalizations)
             {
-                var locale = GetLocaleForKey(localizationKey);
-
-                if (locale == null)
-                {
-                    s_log.LogWarning($"\tLocale {localizationKey} not supported!");
-                    continue;
-                }
-
-                var ld = new LocalizationData
-                {
-                    Key = locale,
-                    Value = translation
-                };
-
-                s_log.LogInfo($"\tAdding {cardTemplate.Name} translation for {locale.Identifier.Code}: {translation}");
-
-                soulCardData.NameOverride.Add(ld);
+                soulCardData.NameOverride.Add(localization);
             }
         }
         else
         {
-            s_log.LogWarning($"No localizations provided for {cardTemplate.Name}!");
+            s_log.LogWarning($"No Name localizations provided for {cardTemplate.Name}!");
         }
 
         soulCardData.StatsModifier = cardTemplate.CreateStatsModifier();
             
+        
         return soulCardData;
     }
 }
