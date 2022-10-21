@@ -119,7 +119,7 @@ public static partial class CardHelper
                 continue;
             }
 
-            var explicitlyBanishedCards = GetCardsForIdentifiers(allCards, cardTemplate.BanishesCardNames);
+            var explicitlyBanishedCards = GetCardsForIdentifiers(allCards, cardTemplate.BanishesCardsByName);
                 
             s_log.LogInfo($"Explicitly banished cards: {explicitlyBanishedCards.Count}");
 
@@ -128,7 +128,7 @@ public static partial class CardHelper
                 s_log.LogInfo($"\t{card.name}");
             }
                 
-            var banishedCardsByStat = GetCardsWithStatModifiers(statToCardMap, cardTemplate.BanishesCardsWithStatModifiers);
+            var banishedCardsByStat = GetCardsWithStatModifiers(statToCardMap, cardTemplate.BanishesCardsWithStatsOfType);
             s_log.LogInfo($"Banished cards by stat: {banishedCardsByStat.Count}");
             foreach (var card in banishedCardsByStat)
             {
@@ -154,14 +154,21 @@ public static partial class CardHelper
     }
         
     private static List<SoulCardScriptableObject> GetCardsWithStatModifiers(
-        Dictionary<string, List<SoulCardScriptableObject>> statToCardsMap, List<StatsType> modifiersToCheck)
+        Dictionary<string, List<SoulCardScriptableObject>> statToCardsMap, List<string> modifiersToCheck)
     {
         var result = new List<SoulCardScriptableObject>();
 
         foreach (var modifier in modifiersToCheck)
         {
-            var cardsForModifier = statToCardsMap[modifier.ToString()];
-            result.AddRange(cardsForModifier);
+            var cardsForModifier = statToCardsMap.GetValueOrDefault(modifier);
+            if (cardsForModifier != null)
+            {
+                result.AddRange(cardsForModifier);
+            }
+            else
+            {
+                s_log.LogWarning($"No cards found for modifier {modifier}");
+            }
         }
             
         return result.Distinct().ToList();
@@ -206,47 +213,36 @@ public static partial class CardHelper
         soulCardData.LevelUpWeight = cardTemplate.LevelUpWeight;
         soulCardData.MaxLevel = cardTemplate.MaxLevel;
 
-        s_log.LogInfo($"\tLoading localizations");
-        foreach (var (localizationKey, translation) in cardTemplate.NameLocalization)
+        if (cardTemplate.NameLocalization.Count > 0)
         {
-            var locale = GetLocaleForKey(localizationKey);
-
-            if (locale == null)
+            s_log.LogInfo($"\tLoading localizations");
+            foreach (var (localizationKey, translation) in cardTemplate.NameLocalization)
             {
-                s_log.LogError($"\tLocale {localizationKey} not supported!");
-                continue;
+                var locale = GetLocaleForKey(localizationKey);
+
+                if (locale == null)
+                {
+                    s_log.LogWarning($"\tLocale {localizationKey} not supported!");
+                    continue;
+                }
+
+                var ld = new LocalizationData
+                {
+                    Key = locale,
+                    Value = translation
+                };
+
+                s_log.LogInfo($"\tAdding {cardTemplate.Name} translation for {locale.Identifier.Code}: {translation}");
+
+                soulCardData.NameOverride.Add(ld);
             }
-
-            var ld = new LocalizationData
-            {
-                Key = locale,
-                Value = translation
-            };
-
-            s_log.LogInfo($"\tAdding {cardTemplate.Name} translation for {locale.Identifier.Code}: {translation}");
-
-            soulCardData.NameOverride.Add(ld);
         }
-
-        var statsMod = new StatsModifier();
-
-        foreach (var modifier in cardTemplate.Modifiers)
+        else
         {
-            var singMod = new SingularModifier();
-            singMod.Value = modifier.ModifierValue;
-            singMod.ModifierType = modifier.ModifierType;
-
-            var sm = new StatModifier();
-            sm.Value = singMod;
-
-            var modifierKey = modifier.Stat.ToString();
-
-            sm.Key = modifierKey;
-
-            statsMod.ModifiersList.Add(sm);
+            s_log.LogWarning($"No localizations provided for {cardTemplate.Name}!");
         }
 
-        soulCardData.StatsModifier = statsMod;
+        soulCardData.StatsModifier = cardTemplate.ConvertModifiersToStatsModifier();
             
         return soulCardData;
     }
