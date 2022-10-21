@@ -81,6 +81,31 @@ public static partial class CardHelper
        
         PostProcessBanishes(allCards, successFullyAddedCards);
         PostProcessRemovals(allCards, successFullyAddedCards);
+        PostProcessRequirements(allCards, successFullyAddedCards);
+    }
+
+    private static void PostProcessRequirements(Dictionary<string,SoulCardScriptableObject> allCards, Dictionary<string,CardTemplate> addedCards)
+    {
+        s_log.LogInfo($"Post processing requirements for {addedCards.Count} cards");
+
+        var addedCardNames = addedCards.Keys;
+        foreach (var cardName in addedCardNames)
+        {
+            var cardTemplate = addedCards[cardName];
+            var cardScso = allCards[cardName];
+
+            if (cardTemplate.RequiresAny != null)
+            {
+                s_log.LogInfo($"\t{cardName} - RequiresAny");
+                cardScso.CardRequirement = cardTemplate.RequiresAny.ToRequirementList();
+            }
+
+            if (cardTemplate.RequiresAll != null)
+            {
+                s_log.LogInfo($"\t{cardName} - RequiresAll");
+                cardScso.HardCardRequirement = cardTemplate.RequiresAll.ToRequirementList();
+            }
+        }
     }
 
     private static void PostProcessRemovals(Dictionary<string, SoulCardScriptableObject> allCards,
