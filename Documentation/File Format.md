@@ -10,10 +10,7 @@
       "Name": "Gigantism",
       "TexturePath": "placeholder.png",
       "Rarity": "Epic",
-      "Tags": [
-        "Body",
-        "Might"
-      ],
+      "Tags": [ "Body", "Might" ],
       "DropWeight": 9999,
       "LevelUpWeight": 9999,
       "MaxLevel": 3,
@@ -27,18 +24,15 @@
           "ModifierValue": 1.15,
           "ModifierType": "Compound",
           "Stat": "ProjectileSize"
-        },
-        {
-          "ModifierValue": 0.90,
-          "ModifierType": "Compound",
-          "Stat": "MoveSpeed"
         }
       ],
       "NameLocalization": {
         "en": "Gigantism",
-        "fr": "Gigantisme",
-        "de": "Gigantismus"
-      }
+        "fr": "Gigantisme"
+      },
+      "BanishesCardsByName": [ "Lunatic" ],
+      "BanishesCardsWithStatsOfType": [ "CriticalMultiplier", "CriticalChance" ],
+      "RemovesCards": [ "Lunatic", "Martyr" ]
     }
   ]
 }
@@ -52,17 +46,20 @@ If provided, will set the `ModSource` value on all your cards to this value. If 
 
 Contains a list of cards that modify `Stats`. Each entry has the following options:
 
-| Element            | Meaning                                                                                                                | Notes                                                                                                                                                                                                                                                                        |
-|--------------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Name`             | Internal name of the card                                                                                              |                                                                                                                                                                                                                                                                              | 
-| `TexturePath`      | The path to the file to load for the image                                                                             | The files must be below the `EasyCards\Assets` path                                                                                                                                                                                                                          |
-| `Rarity`           | Card Rarity                                                                                                            | Possible values are: <br/>`Tainted`<br/>`Normal`<br/>`Uncommon`<br/>`Rare`<br/>`Epic`<br/>`Heroic`<br/>`Ascended`<br/>`Evolution`                                                                                                                                            |
-| `Tags`             | Tags for the card                                                                                                      | Possible values are: <br/>`Order`<br/>`Critical`<br/>`Defence`<br/>`Body`<br/>`Might`<br/>`Evolution`                                                                                                                                                                        |
-| `DropWeight`       | How likely is the card to drop                                                                                         |                                                                                                                                                                                                                                                                              |
-| `LevelUpWeight`    | Same as `DropWeight`, but applied to how likely the card is to show up again                                           |                                                                                                                                                                                                                                                                              |
-| `MaxLevel`         | The maximum level for the card                                                                                         |                                                                                                                                                                                                                                                                              |
-| `Modifiers`        | List of modifiers the card applies. See [Modifier](#modifier) entry for format                                         |                                                                                                                                                                                                                                                                              |
-| `NameLocalization` | Localization entries for the name of the card. Each entry is in the format of `"localization-code": "Localized Name",` | Currently supported locales are:<br/>`en` - English<br/>`fr` - French<br />`zh-Hans` - Chinese (Simplified)<br />`ko` - Korean<br />`pt` - Portuguese<br />`ja` - Japanese<br />`de` - German<br />`es` - Spanish<br />`ru` - Russian<br />`tr` - Turkish<br />`da` - Danish |
+| Element               | Meaning                                                                                                                                                 | Notes                                                                                                                                                                                                                                                                        |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name`                | Internal name of the card                                                                                                                               |                                                                                                                                                                                                                                                                              | 
+| `TexturePath`         | The path to the file to load for the image                                                                                                              | The files must be below the `EasyCards\Assets` path                                                                                                                                                                                                                          |
+| `Rarity`              | Card Rarity                                                                                                                                             | Possible values are: <br/>`Tainted`<br/>`Normal`<br/>`Uncommon`<br/>`Rare`<br/>`Epic`<br/>`Heroic`<br/>`Ascended`<br/>`Evolution`                                                                                                                                            |
+| `Tags`                | Tags for the card                                                                                                                                       | Possible values are: <br/>`Order`<br/>`Critical`<br/>`Defence`<br/>`Body`<br/>`Might`<br/>`Evolution`                                                                                                                                                                        |
+| `DropWeight`          | How likely is the card to drop                                                                                                                          |                                                                                                                                                                                                                                                                              |
+| `LevelUpWeight`       | Same as `DropWeight`, but applied to how likely the card is to show up again                                                                            |                                                                                                                                                                                                                                                                              |
+| `MaxLevel`            | The maximum level for the card                                                                                                                          |                                                                                                                                                                                                                                                                              |
+| `Modifiers`           | List of modifiers the card applies. See [Modifier](#modifier) entry for format                                                                          |                                                                                                                                                                                                                                                                              |
+| `NameLocalization`    | Localization entries for the name of the card. Each entry is in the format of `"localization-code": "Localized Name",`                                  | Currently supported locales are:<br/>`en` - English<br/>`fr` - French<br />`zh-Hans` - Chinese (Simplified)<br />`ko` - Korean<br />`pt` - Portuguese<br />`ja` - Japanese<br />`de` - German<br />`es` - Spanish<br />`ru` - Russian<br />`tr` - Turkish<br />`da` - Danish |
+| `BanishesCardsByName` | Banishes cards by their internal names (i.e. `Lunatic`, `FireSpirit`). Banishing prevents them from showing up again in the level up screen.            |                                                                                                                                                                                                                                                                              |
+| `BanishesCardsWithStatsOfType` | Banishes cards by the stats they modify (i.e. `CriticalMultiplier`, `MoveSpeed`). Banishing prevents them from showing up again in the level up screen. |                                                                                                                                                                                                                                                                              |
+| `RemovesCards` | Removes cards by their internal name (i.e. `Lunatic`, `FireSpirit`). This removes them from your list of cards if you currently have them.              |                                                                                                                                                                                                                                                                              |
 
 ### Modifier
 
