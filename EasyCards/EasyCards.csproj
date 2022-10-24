@@ -33,7 +33,7 @@
   
   <Target Name="PostPublishCleanup" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
-      <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName).dll" />
+      <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName)*.dll" />
       <FilesToDelete Include="$(PublishDir)*.pdb" />
       <FilesToDelete Include="$(PublishDir)*.deps.json" />
     </ItemGroup>
