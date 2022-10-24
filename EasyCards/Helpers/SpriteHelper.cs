@@ -1,10 +1,12 @@
 using System.IO;
+using BepInEx.Logging;
 using UnityEngine;
 
 namespace EasyCards.Helpers;
 
 public static class SpriteHelper
 {
+    private static ManualLogSource Logger => EasyCards.Instance.Log;
     private static Texture2D LoadPNGIntoTexture(string filePath) {
         Texture2D tex = null;
 
@@ -20,7 +22,7 @@ public static class SpriteHelper
             }
             else
             {
-                EasyCards.Log.LogInfo($"Texture couldn't be loaded: {filePath}");
+                Logger.LogInfo($"Texture couldn't be loaded: {filePath}");
             }
         }
 
