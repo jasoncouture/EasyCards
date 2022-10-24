@@ -34,7 +34,7 @@ jobs:
       - name: "Build configuration: ${{ matrix.configuration }}"
         run: dotnet build -c ${{ matrix.configuration }} --no-restore --nologo
       - name: "Publish configuration: ${{ matrix.configuration }}"
-        run: dotnet publish -c ${{ matrix.configuration }} --no-build --nologo -o publish_output
+        run: dotnet publish -c ${{ matrix.configuration }} --no-build --nologo -o publish_output EasyCards
       - name: "Zip binaries for configuration: ${{ matrix.configuration }}"
         run: pushd publish_output && zip ../EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip -r ./; popd
       - name: Upload EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
