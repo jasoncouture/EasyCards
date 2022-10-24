@@ -1,3 +1,4 @@
+using EasyCards.Models.Templates;
 using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;

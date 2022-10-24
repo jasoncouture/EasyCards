@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using BepInEx.Logging;
 using EasyCards.Extensions;
-using EasyCards.Templates;
+using EasyCards.Models.Templates;
 using ModGenesia;
 using RogueGenesia.Data;
 
@@ -204,9 +204,9 @@ public static partial class CardHelper
         s_log.LogInfo($"\tSprite loaded: {sprite != null}");
         soulCardData.Texture = sprite;
 
-        soulCardData.Rarity = cardTemplate.Rarity;
+        soulCardData.Rarity = (CardRarity)(int)cardTemplate.Rarity;
 
-        var tags = cardTemplate.Tags.Aggregate<CardTag, CardTag>(0, (current, tag) => current | tag);
+        var tags = (CardTag)cardTemplate.Tags.Aggregate(0, (current, tag) => current | (int)tag);
 
         soulCardData.Tags = tags;
         soulCardData.DropWeight = cardTemplate.DropWeight;
@@ -242,7 +242,7 @@ public static partial class CardHelper
             s_log.LogWarning($"No localizations provided for {cardTemplate.Name}!");
         }
 
-        soulCardData.StatsModifier = cardTemplate.ConvertModifiersToStatsModifier();
+        soulCardData.StatsModifier = cardTemplate.CreateStatsModifier();
             
         return soulCardData;
     }
