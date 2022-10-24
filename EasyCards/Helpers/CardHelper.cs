@@ -7,6 +7,7 @@ using EasyCards.Extensions;
 using EasyCards.Models.Templates;
 using ModGenesia;
 using RogueGenesia.Data;
+using UnityEngine;
 
 namespace EasyCards.Helpers;
 
@@ -30,7 +31,7 @@ public static partial class CardHelper
             }
         }
     }
-    
+
     private static UnityEngine.Localization.Locale GetLocaleForKey(string localizationKey)
     {
         foreach (var locale in ModGenesia.ModGenesia.GetLocales())
@@ -61,7 +62,7 @@ public static partial class CardHelper
         var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
 
         var successFullyAddedCards = new Dictionary<string, CardTemplate>();
-            
+
         foreach (var cardTemplate in templateFile.Stats)
         {
             try
@@ -78,23 +79,69 @@ public static partial class CardHelper
         }
 
         var allCards = GetAllCardsAsDictionary();
-       
+
+        PostProcessDescriptions(allCards, successFullyAddedCards);
         PostProcessBanishes(allCards, successFullyAddedCards);
         PostProcessRemovals(allCards, successFullyAddedCards);
+        PostProcessRequirements(allCards, successFullyAddedCards);
+    }
+
+    private static void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
+        Dictionary<string, CardTemplate> addedCards)
+    {
+        if (EasyCards.ShouldLogCardDetails)
+            s_log.LogInfo($"=== Post processing requirements for {addedCards.Count} cards ===");
+
+        var addedCardNames = addedCards.Keys;
+        foreach (var cardName in addedCardNames)
+        {
+            if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"Processing {cardName}");
+            var cardTemplate = addedCards[cardName];
+            var cardScso = allCards[cardName];
+
+            if (cardTemplate.RequiresAny != null)
+            {
+                if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"\t{cardName} - RequiresAny");
+                cardScso.CardRequirement = cardTemplate.RequiresAny.ToRequirementList();
+                if (EasyCards.ShouldLogCardDetails) DebugHelper.LogRequirements(cardScso.CardRequirement, "\t\t");
+            }
+
+            if (cardTemplate.RequiresAll != null)
+            {
+                if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"\t{cardName} - RequiresAll");
+                cardScso.HardCardRequirement = cardTemplate.RequiresAll.ToRequirementList();
+                if (EasyCards.ShouldLogCardDetails) DebugHelper.LogRequirements(cardScso.HardCardRequirement, "\t\t");
+            }
+        }
     }
 
     private static void PostProcessRemovals(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        s_log.LogInfo($"Post processing removals for {addedCards.Count} cards");
+        if (EasyCards.ShouldLogCardDetails)
+            s_log.LogInfo($"=== Post processing removals for {addedCards.Count} cards ===");
 
         var addedCardNames = addedCards.Keys;
         foreach (var cardName in addedCardNames)
         {
+            if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
             var cardsToRemove = GetCardsForIdentifiers(allCards, cardTemplate.RemovesCards);
+
+            if (EasyCards.ShouldLogCardDetails)
+            {
+                if (cardsToRemove.Count > 0)
+                {
+                    s_log.LogInfo($"\tRemoves {cardsToRemove.Count} cards:");
+                    foreach (var cardToRemove in cardsToRemove)
+                    {
+                        s_log.LogInfo($"\t\t{cardToRemove.name}");
+                    }
+                }
+            }
+
             cardScso.CardToRemove = cardsToRemove.ToIl2CppReferenceArray();
         }
     }
@@ -102,57 +149,72 @@ public static partial class CardHelper
     private static void PostProcessBanishes(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        s_log.LogInfo($"Post processing banishes for {addedCards.Count} cards");
-            
+        if (EasyCards.ShouldLogCardDetails)
+            s_log.LogInfo($"=== Post processing banishes for {addedCards.Count} cards ===");
+
         var addedCardNames = addedCards.Keys;
         var statToCardMap = GetAllCardsByStatsType();
-            
+
         foreach (var cardName in addedCardNames)
         {
-            s_log.LogInfo($"Processing {cardName}");
+            if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
             if (cardTemplate == null || cardScso == null)
             {
-                s_log.LogInfo($"Template and SCSO are null! bailing!");
+                if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"\tTemplate and SCSO are null! bailing!");
                 continue;
             }
 
             var explicitlyBanishedCards = GetCardsForIdentifiers(allCards, cardTemplate.BanishesCardsByName);
-                
-            s_log.LogInfo($"Explicitly banished cards: {explicitlyBanishedCards.Count}");
 
-            foreach (var card in explicitlyBanishedCards)
+            if (EasyCards.ShouldLogCardDetails)
             {
-                s_log.LogInfo($"\t{card.name}");
+                s_log.LogInfo($"\tExplicitly banished cards: {explicitlyBanishedCards.Count}");
+                foreach (var card in explicitlyBanishedCards)
+                {
+                    s_log.LogInfo($"\t\t{card.name}");
+                }
             }
-                
-            var banishedCardsByStat = GetCardsWithStatModifiers(statToCardMap, cardTemplate.BanishesCardsWithStatsOfType);
-            s_log.LogInfo($"Banished cards by stat: {banishedCardsByStat.Count}");
-            foreach (var card in banishedCardsByStat)
+
+            var banishedCardsByStat =
+                GetCardsWithStatModifiers(statToCardMap, cardTemplate.BanishesCardsWithStatsOfType);
+            if (EasyCards.ShouldLogCardDetails)
             {
-                s_log.LogInfo($"\t{card.name}");
+                s_log.LogInfo($"\tBanished cards by stat: {banishedCardsByStat.Count}");
+                foreach (var card in banishedCardsByStat)
+                {
+                    s_log.LogInfo($"\t\t{card.name}");
+                }
             }
 
             var finalList = new List<SoulCardScriptableObject>(explicitlyBanishedCards);
             finalList.AddRange(banishedCardsByStat);
 
             finalList = finalList.Distinct().ToList();
-            
+
             // Make sure we don't accidentally banish the card that is being processed right now.
             var removedCards = finalList.RemoveAll(card => card.name == cardName);
             if (removedCards > 0)
             {
-                s_log.LogInfo($"Removed {cardName} from the list of banished cards! We don't want to banish ourselves, do we?");
+                s_log.LogInfo(
+                    $"\tRemoved {cardName} from the list of banished cards! We don't want to banish ourselves, do we?");
             }
 
-            s_log.LogInfo($"Final list of banished cards: {finalList.Count}");
+            if (EasyCards.ShouldLogCardDetails)
+            {
+                s_log.LogInfo($"\tFinal list of banished cards: {finalList.Count}");
+                foreach (var banishedCard in finalList)
+                {
+                    s_log.LogInfo($"\t\t{banishedCard.name}");
+                }
+            }
+            
             cardScso.CardExclusion = finalList.ToIl2CppReferenceArray();
-
         }
     }
-        
+
     private static List<SoulCardScriptableObject> GetCardsWithStatModifiers(
         Dictionary<string, List<SoulCardScriptableObject>> statToCardsMap, List<string> modifiersToCheck)
     {
@@ -170,7 +232,7 @@ public static partial class CardHelper
                 s_log.LogWarning($"No cards found for modifier {modifier}");
             }
         }
-            
+
         return result.Distinct().ToList();
     }
 
@@ -196,7 +258,7 @@ public static partial class CardHelper
         var soulCardData = new SoulCardCreationData();
 
         soulCardData.ModSource = modSource;
-            
+
         var texturePath = Path.Combine(Paths.Assets, cardTemplate.TexturePath);
 
         var sprite = SpriteHelper.LoadSpriteFromFile(texturePath);
@@ -212,38 +274,22 @@ public static partial class CardHelper
         soulCardData.DropWeight = cardTemplate.DropWeight;
         soulCardData.LevelUpWeight = cardTemplate.LevelUpWeight;
         soulCardData.MaxLevel = cardTemplate.MaxLevel;
+        
+        soulCardData.StatsModifier = cardTemplate.CreateStatsModifier();
 
         if (cardTemplate.NameLocalization.Count > 0)
         {
-            s_log.LogInfo($"\tLoading localizations");
-            foreach (var (localizationKey, translation) in cardTemplate.NameLocalization)
+            var nameLocalizations = GetNameTranslations(cardTemplate);
+            foreach (var localization in nameLocalizations)
             {
-                var locale = GetLocaleForKey(localizationKey);
-
-                if (locale == null)
-                {
-                    s_log.LogWarning($"\tLocale {localizationKey} not supported!");
-                    continue;
-                }
-
-                var ld = new LocalizationData
-                {
-                    Key = locale,
-                    Value = translation
-                };
-
-                s_log.LogInfo($"\tAdding {cardTemplate.Name} translation for {locale.Identifier.Code}: {translation}");
-
-                soulCardData.NameOverride.Add(ld);
+                soulCardData.NameOverride.Add(localization);
             }
         }
         else
         {
-            s_log.LogWarning($"No localizations provided for {cardTemplate.Name}!");
+            s_log.LogWarning($"No Name localizations provided for {cardTemplate.Name}!");
         }
 
-        soulCardData.StatsModifier = cardTemplate.CreateStatsModifier();
-            
         return soulCardData;
     }
 }

@@ -12,13 +12,14 @@ public class CardTemplate
     public float LevelUpWeight { get; set; }
     public int MaxLevel { get; set; }
     public List<ModifierTemplate> Modifiers { get; set; } = new();
-    public Dictionary<string, string> NameLocalization { get; set; }
+    public Dictionary<string, string> NameLocalization { get; set; } = new();
+    public Dictionary<string, string> DescriptionLocalization { get; set; } = new();
 
     public List<string> BanishesCardsByName { get; set; } = new();
     public List<string> BanishesCardsWithStatsOfType { get; set; } = new();
     public List<string> RemovesCards { get; set; } = new();
-    public List<string> RequiresAny { get; set; } = new();
-    public List<string> RequiresAll { get; set; } = new();
+    public RequirementTemplate RequiresAny { get; set; }
+    public RequirementTemplate RequiresAll { get; set; }
 
     public override string ToString()
     {

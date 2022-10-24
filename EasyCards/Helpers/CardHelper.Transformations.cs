@@ -23,6 +23,12 @@ public static partial class CardHelper
 
         foreach (var card in GetAllCards())
         {
+            if (card.StatsModifier == null)
+            {
+                EasyCards.Log.LogWarning($"Card {card.name} doesn't modify stats!");
+                continue;
+            }
+            
             foreach (var modifier in card.StatsModifier.ModifiersList)
             {
                 if (!result.ContainsKey(modifier.Key))
