@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using EasyCards.Templates;
+using EasyCards.Models.Templates;
 using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
