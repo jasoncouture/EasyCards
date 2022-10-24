@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <!-- Content to copy -->
-    <Content Include="../DataToCopy/EasyCards/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" LinkBase="EasyCards" />
+    <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
   </ItemGroup>
   
   <Target Name="PostPublishCleanup" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
@@ -41,7 +41,7 @@
     <Delete Files="@(FilesToDelete)" />
   </Target>
   <Target Name="CreateDataDirectory" AfterTargets="Publish">
-    <Message Text="Creating EasyCards/Data directory" Importance="high" />
-    <MakeDir Directories="$(PublishDir)EasyCards/Data" ContinueOnError="true" />
+    <Message Text="Creating Data directory" Importance="high" />
+    <MakeDir Directories="$(PublishDir)Data" ContinueOnError="true" />
   </Target>
 </Project>

@@ -47,8 +47,8 @@ public static partial class CardHelper
     }
 
     private static void PostProcessDescriptions(Dictionary<string,SoulCardScriptableObject> allCards, Dictionary<string,CardTemplate> addedCards)
-    {
-        s_log.LogInfo($"Post processing descriptions for {addedCards.Count} cards");
+    { 
+        if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"=== Post processing descriptions for {addedCards.Count} cards ===");
 
         foreach (var cardName in addedCards.Keys)
         {
@@ -57,7 +57,7 @@ public static partial class CardHelper
 
             var cardScso = allCards[cardName];
             var translations = GetDescriptionTranslations(cardTemplate);
-            s_log.LogInfo($"Got {translations.Count} description translations");
+            if (EasyCards.ShouldLogCardDetails) s_log.LogInfo($"\tGot {translations.Count} description translations for {cardName}");
 
             foreach (var translation in translations)
             {

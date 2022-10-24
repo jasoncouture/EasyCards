@@ -59,21 +59,12 @@ public static class CardTemplateExtensions
     
     public static SCSORequirementList ToRequirementList(this RequirementTemplate template)
     {
-        if (template.Cards == null && template.Stats == null)
-        {
-            EasyCards.Log.LogInfo($"Nothing to convert, leaving");
-            return null;
-        }
 
         List<ModCardRequirement> cardRequirements = new();
 
         if (template.Cards != null)
         {
             cardRequirements = template.Cards.ConvertAll(template => template.ToModCardRequirement());
-        }
-        else
-        {
-            EasyCards.Log.LogInfo($"No Card requirements");
         }
 
         StatsModifier statRequirements = null;
@@ -82,15 +73,10 @@ public static class CardTemplateExtensions
         
         if (template.Stats != null)
         {
-            EasyCards.Log.LogInfo($"Converting Stat requirements");
             statRequirements = template.Stats.ToStatsModifier();
             isMinRequirement = template.Stats.IsMinRequirement();
         }
-        else
-        {
-            EasyCards.Log.LogInfo($"No Stat requirements");
-        }
-        
+
         var requirementList = ModGenesia.ModGenesia.MakeCardRequirement(cardRequirements?.ToIl2CppReferenceArray(), statRequirements, isMinRequirement);
         
         return requirementList;
@@ -102,8 +88,6 @@ public static class CardTemplateExtensions
             cardName = template.Name,
             requiredLevel = template.Level
         };
-        
-        EasyCards.Log.LogInfo($"Card Requirement: Name: {template.Name}, Level: {template.Level}");
 
         return requirement;
     }
