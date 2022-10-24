@@ -1,16 +1,13 @@
-using System.Collections.Generic;
-using RogueGenesia.Data;
-
-namespace EasyCards.Templates;
+namespace EasyCards.Models.Templates;
 
 public class CardTemplate
 {
     public string Name { get; set; }
     public string TexturePath { get; set; }
 
-    public CardRarity Rarity { get; set; }
+    public TemplateCardRarity Rarity { get; set; }
 
-    public List<CardTag> Tags { get; set; } = new();
+    public List<TemplateCardTag> Tags { get; set; } = new();
     public float DropWeight { get; set; }
     public float LevelUpWeight { get; set; }
     public int MaxLevel { get; set; }
@@ -23,24 +20,8 @@ public class CardTemplate
     public List<string> RequiresAny { get; set; } = new();
     public List<string> RequiresAll { get; set; } = new();
 
-    public void Validate()
-    {
-    }
-
     public override string ToString()
     {
         return $"{nameof(Name)}: {Name}, {nameof(TexturePath)}: {TexturePath}, {nameof(Rarity)}: {Rarity}, {nameof(Tags)}: {Tags}, {nameof(DropWeight)}: {DropWeight}, {nameof(LevelUpWeight)}: {LevelUpWeight}, {nameof(MaxLevel)}: {MaxLevel}, {nameof(Modifiers)}: {Modifiers}";
-    }
-
-    public StatsModifier ConvertModifiersToStatsModifier()
-    {
-        var statsMod = new StatsModifier();
-
-        foreach (var modifier in Modifiers)
-        {
-            statsMod.ModifiersList.Add(modifier.ToStatModifier());
-        }
-
-        return statsMod;
     }
 }

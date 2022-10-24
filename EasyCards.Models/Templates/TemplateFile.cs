@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace EasyCards.Templates;
+namespace EasyCards.Models.Templates;
 
 public class TemplateFile
 {
