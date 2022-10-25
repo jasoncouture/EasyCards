@@ -1,9 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Collections.Concurrent;
 using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
-using EasyCards.Helpers;
-using HarmonyLib;
+using EasyCards.Bootstrap;
+using Il2CppInterop.Generator.Extensions;
 
 namespace EasyCards
 {
@@ -11,26 +10,13 @@ namespace EasyCards
     public class EasyCards : BasePlugin
     {
         internal static EasyCards Instance { get; private set; }
-        private ConfigEntry<bool> _configLogCardDetails;
-
-        public static bool ShouldLogCardDetails => Instance._configLogCardDetails.Value;
 
         public override void Load()
         {
+            // This must be set, before resolving anything from the container.
+            // As the container uses this to expose BepInEx types.
             Instance = this;
-
-            _configLogCardDetails = Config.Bind("Debug", "LogCards", false,
-                "Logs details about the added cards at the end of initialization");
-
-            Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loading! Patching!");
-
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
-
-            DebugHelper.Initialize();
-
-            CardHelper.LoadCustomCards();
-
-            Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+            Container.Instance.Resolve<IEasyCardsPluginLoader>().Load();
         }
     }
 }
