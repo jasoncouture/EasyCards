@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using EasyCards.Extensions;
 using EasyCards.Models.Templates;
@@ -10,7 +11,7 @@ public static class CardTemplateExtensions
 {
     public  static StatsModifier ToStatsModifier(this StatRequirementTemplate template)
     {
-        if (EnumHelper.IsValidIdentifierForEnum<StatRequirementType>(template.RequirementType))
+        if(Enum.TryParse<StatRequirementType>(template.RequirementType, true, out _))
         {
             var statsModifier = new StatsModifier();
 
@@ -36,7 +37,7 @@ public static class CardTemplateExtensions
     }
     public static StatModifier ToStatModifier( this StatRequirement template)
     {
-        if (EnumHelper.IsValidIdentifierForEnum<StatsType>(template.Name))
+        if (Enum.TryParse<StatRequirementType>(template.Name, true, out _))
         {
             var statModifier = new StatModifier();
 
