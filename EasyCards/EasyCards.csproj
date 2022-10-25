@@ -6,10 +6,6 @@
     <Description></Description>
     <Version>1.0.7</Version>
     <LangVersion>latest</LangVersion>
-    <RestoreAdditionalProjectSources>
-      https://api.nuget.org/v3/index.json;
-      https://nuget.bepinex.dev/v3/index.json
-    </RestoreAdditionalProjectSources>
     <RootNamespace>EasyCards</RootNamespace>
     <PackageVersion>1.0.7</PackageVersion>
     <Authors>chendrak</Authors>
@@ -19,6 +15,7 @@
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
     <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" IncludeAssets="all" />
+    <PackageReference Include="StrongInject" Version="1.4.4" />
   </ItemGroup>
   
   <ItemGroup>
