@@ -1,4 +1,7 @@
 using System;
+using System.CodeDom.Compiler;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace EasyCards.EnumGenerator
@@ -7,6 +10,30 @@ namespace EasyCards.EnumGenerator
     {
         private int _blockDepth = 0;
         private readonly StringBuilder _builder = new StringBuilder();
+        public string ClassName { get; set; }
+
+        public int Depth => _blockDepth;
+        public static SyntaxBuilder FromString(string text)
+        {
+            var builder = new SyntaxBuilder();
+            foreach (var line in text.Split('\r', '\n'))
+            {
+                switch (line)
+                {
+                    case "{":
+                        builder.BeginBlock();
+                        break;
+                    case "}":
+                        builder.EndBlock();
+                        break;
+                    default:
+                        builder.AppendLine(line);
+                        break;
+                }
+            }
+
+            return builder;
+        }
 
         public void Reset()
         {
@@ -70,6 +97,66 @@ namespace EasyCards.EnumGenerator
         public override string ToString()
         {
             return _builder.ToString();
+        }
+
+        private void FormatCode()
+        {
+            var builder = new StringBuilder();
+            using (var stringWriter = new StringWriter(builder))
+            using (var indentedTextWriter = new IndentedTextWriter(stringWriter, tabString: "    "))
+            {
+                foreach (var line in _builder.ToString().Split('\n').Select(i => i.Trim('\r', ' ')))
+                {
+                    if (line == "}")
+                    {
+                        indentedTextWriter.Indent -= 1;
+                    }
+
+                    indentedTextWriter.WriteLine(line);
+
+                    if (line == "{")
+                    {
+                        indentedTextWriter.Indent += 1;
+                    }
+                }
+
+                indentedTextWriter.Flush();
+            }
+
+            _builder.Clear();
+            _builder.Append(builder);
+        }
+        public SyntaxBuilder Format()
+        {
+            FormatCode();
+            return this;
+        }
+
+        public SyntaxBuilder PrependBlock()
+        {
+            _blockDepth++;
+            PrependLine();
+            _builder.Insert(0, "{");
+            return this;
+        }
+
+        public SyntaxBuilder PrependLine(string s)
+        {
+            PrependLine();
+            _builder.Insert(0, s);
+            return this;
+        }
+        public SyntaxBuilder PrependLine()
+        {
+            _builder.Insert(0, "\r\n");
+            return this;
+        }
+        public SyntaxBuilder PrependBlock(string s)
+        {
+            PrependBlock();
+            PrependLine();
+            _builder.Insert(0, s);
+            return this;
         }
     }
 }

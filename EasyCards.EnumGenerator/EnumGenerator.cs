@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using EasyCards.EnumGenerator.EnumScannerModels;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 #if DEBUG && DEBUG_ENUM_GENERATOR
 using System.Diagnostics;
 using System.Threading;
@@ -17,8 +16,10 @@ using System.Threading;
 namespace EasyCards.EnumGenerator
 {
     [Generator]
-    public class EnumGenerator : DeclarationBuilderSourceGenerator
+    public class EnumGenerator : ISourceGenerator
     {
+        static readonly DiagnosticDescriptor CreatedEnumMessageDescriptor = new DiagnosticDescriptor("EASYCARDS0000", "Easy Cards Generation Message", "Successfully generated enum {0}", "EasyCards", DiagnosticSeverity.Info, true);
+        static readonly DiagnosticDescriptor EnumCreateFailedDiagnosticWarningDescriptor = new DiagnosticDescriptor("EASYCARDS0001", "Enum Generation Failed", "Enum generation for {0} failed: {1}", "EasyCards", DiagnosticSeverity.Warning, true);
         static EnumGenerator()
         {
 #if DEBUG && DEBUG_ENUM_GENERATOR
@@ -61,63 +62,44 @@ namespace EasyCards.EnumGenerator
         private static readonly Dictionary<string, Func<ulong, string>> EnumBaseTypeFormatter;
         private static readonly Dictionary<string, Type> EnumBaseTypeLookup;
 
-        public override void Execute(GeneratorExecutionContext context)
+        public void Initialize(GeneratorInitializationContext context) { }
+
+        public void Execute(GeneratorExecutionContext context)
         {
-            var targetNamespace = GeneratorExecutionContextExtensions.GetAttributeValue(context.Compilation.Assembly, "EnumNamespace") ??
+            var targetNamespace = context.Compilation.Assembly.GetAttributeValue("EnumNamespace") ??
                                   context.Compilation.AssemblyName;
-            var enumNamePrefix = GeneratorExecutionContextExtensions.GetAttributeValue(context.Compilation.Assembly, "EnumPrefix") ?? string.Empty;
-            var enumNamePostfix = GeneratorExecutionContextExtensions.GetAttributeValue(context.Compilation.Assembly, "EnumPostfix") ?? string.Empty;
+            var enumNamePrefix = context.Compilation.Assembly.GetAttributeValue("EnumPrefix") ?? string.Empty;
+            var enumNamePostfix = context.Compilation.Assembly.GetAttributeValue("EnumPostfix") ?? string.Empty;
             var visibilityModifier = "public";
 
             foreach (var enumDefinition in EnumScanResultsLoader.GetEnumDefinitions().Enums)
             {
-                DefineEnum(context, enumDefinition, enumNamePrefix, enumNamePostfix, visibilityModifier,
-                    targetNamespace);
-                DefineEnumExtension(context, enumDefinition, enumNamePrefix, enumNamePostfix, visibilityModifier,
-                    targetNamespace);
+                var enumTargetName = $"{enumNamePrefix}{enumDefinition.Name}{enumNamePostfix}";
+                var builder = DefineEnum(context, enumDefinition, enumTargetName, visibilityModifier);
+                builder?.WithClassName(enumTargetName)
+                    .FinalizeDeclaration(targetNamespace, "System")
+                    .AddSource(context);;
             }
         }
 
-
-        private void DefineEnumExtension(GeneratorExecutionContext context, EnumDefinition enumDefinition,
-            string enumNamePrefix, string enumNamePostfix, string visibilityModifier, string targetNamespace)
-        {
-            var namespaces = new HashSet<string>();
-            namespaces.Add("System");
-
-            var declaration = new SyntaxBuilder();
-            var enumTargetName = $"{enumNamePrefix}{enumDefinition.Name}{enumNamePostfix}";
-            var className = $"{enumTargetName}Extensions";
-            declaration
-                .BeginBlock($"{visibilityModifier} static class {className}")
-                .BeginBlock($"public static T CastTo<T>(this {enumTargetName} val) where T : struct")
-                .BeginBlock("if (!typeof(T).IsEnum)")
-                .EndBlock("throw new ArgumentException(\"Type argument must be an enum\", nameof(T));")
-                .AppendLine($"return (T)Convert.ChangeType(val, typeof(T));")
-                .EndAllBlocks();
-
-            CreateSourceContent(context, className, targetNamespace, declaration.ToString(), namespaces.ToArray());
-        }
-
-        private void DefineEnum(GeneratorExecutionContext context, EnumDefinition enumDefinition, string enumNamePrefix,
-            string enumNamePostfix, string visibilityModifier, string targetNamespace)
+        private SyntaxBuilder DefineEnum(GeneratorExecutionContext context, EnumDefinition enumDefinition, string enumTargetName,
+            string visibilityModifier)
         {
             if (string.IsNullOrWhiteSpace(enumDefinition.BaseType) ||
                 !EnumBaseTypeLookup.TryGetValue(enumDefinition.BaseType, out var baseType) ||
                 !EnumBaseTypeFormatter.TryGetValue(enumDefinition.BaseType, out var formatter)
                )
-                // TODO: Add diagnostic to compiler log, explaining why we skipped this one.
-                return;
-            var namespaces = new HashSet<string>();
-            namespaces.Add("System");
+            {
+                context.ReportDiagnostic(Diagnostic.Create(EnumCreateFailedDiagnosticWarningDescriptor, Location.None, $"{enumTargetName} ({enumDefinition.Name})", $"Unable to find base type {enumDefinition.BaseType}"));
+                return null;
+            }
 
             var declaration = new SyntaxBuilder();
             if (enumDefinition.Flags)
             {
                 declaration.AppendLine("[Flags]");
             }
-
-            var enumTargetName = $"{enumNamePrefix}{enumDefinition.Name}{enumNamePostfix}";
+            
             declaration.BeginBlock($"{visibilityModifier} enum {enumTargetName} : {baseType.Name}");
             bool first = true;
             foreach (var enumMember in enumDefinition.Members)
@@ -128,11 +110,8 @@ namespace EasyCards.EnumGenerator
                     first = false;
                 declaration.Append(enumMember.Name).Append(" = ").Append(formatter.Invoke(enumMember.Value));
             }
-
-            declaration.AppendLine().EndAllBlocks();
-
-            CreateSourceContent(context, enumTargetName, targetNamespace, declaration.ToString(), namespaces.ToArray());
+            context.ReportDiagnostic(Diagnostic.Create(CreatedEnumMessageDescriptor, Location.None, $"{enumTargetName} ({enumDefinition.Name})"));
+            return declaration;
         }
-
     }
 }
