@@ -111,7 +111,7 @@ namespace EasyCards.EnumGenerator
                 declaration.Append(enumMember.Name).Append(" = ").Append(formatter.Invoke(enumMember.Value));
             }
             context.ReportDiagnostic(Diagnostic.Create(CreatedEnumMessageDescriptor, Location.None, $"{enumTargetName} ({enumDefinition.Name})"));
-            return declaration;
+            return declaration.AppendLine();
         }
     }
 }
