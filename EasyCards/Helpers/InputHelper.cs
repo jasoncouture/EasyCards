@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using BepInEx.Logging;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 namespace EasyCards.Helpers;
 
@@ -10,6 +10,7 @@ public static class InputHelper
 {
     private static Dictionary<Key, List<Action>> s_keyEvents = new();
     private static KeyBehaviour s_keyBehaviourInstance = null;
+    private static ManualLogSource Logger => EasyCards.Instance.Log;
 
     private class KeyBehaviour : MonoBehaviour
     {
@@ -19,10 +20,10 @@ public static class InputHelper
             {
                 if (Keyboard.current[keyEvent.Key].wasPressedThisFrame)
                 {
-                    EasyCards.Log.LogInfo($"{keyEvent.Key} was pressed!");
+                    Logger.LogInfo($"{keyEvent.Key} was pressed!");
                     foreach (var action in keyEvent.Value)
                     {
-                        EasyCards.Log.LogInfo($"Invoking action!");
+                        Logger.LogInfo($"Invoking action!");
                         action.Invoke();
                     }
                 }

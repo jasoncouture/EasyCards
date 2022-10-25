@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using EasyCards.Extensions;
 using EasyCards.Models.Templates;
-using HarmonyLib;
 using ModGenesia;
 using RogueGenesia.Data;
 
@@ -32,7 +31,7 @@ public static class CardTemplateExtensions
             return statsModifier;
         }
 
-        EasyCards.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Values values are: {System.Enum.GetNames(typeof(RequirementTemplate))}");
+        EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Values values are: {System.Enum.GetNames(typeof(RequirementTemplate))}");
         return null;
     }
     public static StatModifier ToStatModifier( this StatRequirement template)
@@ -53,7 +52,7 @@ public static class CardTemplateExtensions
             return statModifier;
         }
 
-        EasyCards.Log.LogWarning($"{template.Name} is not valid a valid stat name!");
+        EasyCards.Instance.Log.LogWarning($"{template.Name} is not valid a valid stat name!");
         return null;
     }
     
