@@ -46,7 +46,7 @@ namespace EasyCards.EnumGenerator
                 .BeginBlock($"public static T CastTo<T>(this {enumTargetName} val) where T : struct")
                 .BeginBlock("if (!typeof(T).IsEnum)")
                 .EndBlock("throw new ArgumentException(\"Type argument must be an enum\", nameof(T));")
-                .AppendLine($"return (T)Convert.ChangeType(val, typeof(T));")
+                .AppendLine($"return (T)(object)({enumDefinition.BaseType})val;")
                 .EndBlock();
 
             return declaration;
