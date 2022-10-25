@@ -13,7 +13,7 @@
         <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
         <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
     </ItemGroup>
-    <Target Name="UpdateEnumJson" BeforeTargets="PrepareForBuild">
+    <Target Name="UpdateEnumJson" BeforeTargets="AfterResolveReferences">
         <Exec Command="$(ProjectDir)..\EasyCards.EnumScanner\bin\$(Configuration)\net6.0\EasyCards.EnumScanner $(ProjectDir)$(BaseIntermediateOutputPath)scanned-enums.generated" ConsoleToMSBuild="true" />
         <!-- This item group is here, so that it gets evaluated _after_ the exec command above. -->
         <!-- If this is not here, nested in this target, after exec the project will fail to build on the first build -->
