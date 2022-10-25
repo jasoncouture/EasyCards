@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards", "EasyCards\EasyCards.csproj", "{78AFDD42-2E34-4D0D-9DE7-CCE3B3F54F91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.LibraryUpdater", "EasyCards.LibraryUpdater\EasyCards.LibraryUpdater.csproj", "{43808D1D-AAD6-4A2D-AEBB-38F877CB4234}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.Models", "EasyCards.Models\EasyCards.Models.csproj", "{5D88B535-B6DE-4148-8E09-D999751F8FC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.ModInstaller", "EasyCards.ModInstaller\EasyCards.ModInstaller.csproj", "{D108AEBA-BB66-45A5-8FF8-5C06D27BB6A2}"
@@ -35,10 +33,6 @@ Global
 		{78AFDD42-2E34-4D0D-9DE7-CCE3B3F54F91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78AFDD42-2E34-4D0D-9DE7-CCE3B3F54F91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78AFDD42-2E34-4D0D-9DE7-CCE3B3F54F91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43808D1D-AAD6-4A2D-AEBB-38F877CB4234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43808D1D-AAD6-4A2D-AEBB-38F877CB4234}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43808D1D-AAD6-4A2D-AEBB-38F877CB4234}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43808D1D-AAD6-4A2D-AEBB-38F877CB4234}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D88B535-B6DE-4148-8E09-D999751F8FC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5D88B535-B6DE-4148-8E09-D999751F8FC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D88B535-B6DE-4148-8E09-D999751F8FC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
