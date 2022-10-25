@@ -6,7 +6,7 @@ public enum TemplateStatsType
     HealthRegen = 1,
     Defence = 2,
     DamageMitigation = 3,
-    XPMultiplier = 4,
+    XpMultiplier = 4,
     PickUpDistance = 5,
     AdditionalProjectile = 6,
     ProjectilePiercing = 7,
