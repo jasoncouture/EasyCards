@@ -50,7 +50,7 @@ public static class Localization
 
     public static void PostProcessDescriptions(Dictionary<string,SoulCardScriptableObject> allCards, Dictionary<string,CardTemplate> addedCards)
     { 
-        if (EasyCards.ShouldLogCardDetails) Logger.LogInfo($"=== Post processing descriptions for {addedCards.Count} cards ===");
+        Logger.LogInfo($"=== Post processing descriptions for {addedCards.Count} cards ===");
 
         foreach (var cardName in addedCards.Keys)
         {
@@ -59,7 +59,7 @@ public static class Localization
 
             var cardScso = allCards[cardName];
             var translations = GetDescriptionTranslations(cardTemplate);
-            if (EasyCards.ShouldLogCardDetails) Logger.LogInfo($"\tGot {translations.Count} description translations for {cardName}");
+            Logger.LogInfo($"\tGot {translations.Count} description translations for {cardName}");
 
             foreach (var translation in translations)
             {
