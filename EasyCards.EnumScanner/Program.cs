@@ -1,9 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Collections.Immutable;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 var exportedTypes = typeof(RogueGenesia.GameManager.GameManager).Assembly.GetExportedTypes();
 var enums = exportedTypes.Where(i => i.IsEnum);
@@ -31,24 +29,3 @@ var enumDefinitionsObject = new EnumDefinitions(enumDefinitionList.ToArray());
 var bytes = JsonSerializer.SerializeToUtf8Bytes(enumDefinitionsObject, JsonContext.Default.EnumDefinitions);
 Console.WriteLine("Writing {0} enum definitions, with {1} members total, to {2}", enumDefinitionsObject.Enums.Length, enumDefinitionsObject.Enums.Sum(x => x.Members.Length), target);
 await File.WriteAllBytesAsync(target, bytes, CancellationToken.None);
-
-
-public record EnumDefinition(string Name, string BaseType, bool Flags, EnumMemberDefinition[] Members);
-
-public record EnumMemberDefinition(string Name, ulong Value);
-
-public record EnumDefinitions(EnumDefinition[] Enums);
-
-[JsonSourceGenerationOptions(
-    GenerationMode = JsonSourceGenerationMode.Serialization,
-    DefaultIgnoreCondition = JsonIgnoreCondition.Never,
-    IgnoreReadOnlyProperties = false,
-    WriteIndented = true,
-    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase
-)]
-[JsonSerializable(typeof(EnumDefinition))]
-[JsonSerializable(typeof(EnumMemberDefinition))]
-[JsonSerializable(typeof(EnumDefinitions))]
-internal partial class JsonContext : JsonSerializerContext
-{
-}
