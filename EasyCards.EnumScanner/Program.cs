@@ -13,6 +13,7 @@ var target = Path.GetFullPath(args.Length > 0 ? args[0] : "enums.json");
 var enumDefinitionList = new List<EnumDefinition>();
 foreach (var @enum in enums)
 {
+    Console.Write("Processing enum: {0} ({1})...", @enum.Name, @enum.FullName);
     var name = @enum.Name;
     var baseType = @enum.GetEnumUnderlyingType();
     var enumNames = @enum.GetEnumNames();
@@ -21,21 +22,22 @@ foreach (var @enum in enums)
     var isFlags = @enum.GetCustomAttribute<FlagsAttribute>() is not null;
     var definition = new EnumDefinition(name, baseType.Name, isFlags,
         enumNamesAndValues.Select(keyValuePair => new EnumMemberDefinition(keyValuePair.First, keyValuePair.Second))
-            .ToImmutableArray());
+            .ToArray());
     enumDefinitionList.Add(definition);
+    Console.WriteLine(" Done! ({0} items processed)", definition.Members.Length);
 }
 
-var enumDefinitionsObject = new EnumDefinitions(enumDefinitionList.ToImmutableArray());
+var enumDefinitionsObject = new EnumDefinitions(enumDefinitionList.ToArray());
 var bytes = JsonSerializer.SerializeToUtf8Bytes(enumDefinitionsObject, JsonContext.Default.EnumDefinitions);
 Console.WriteLine("Writing {0} enum definitions, with {1} members total, to {2}", enumDefinitionsObject.Enums.Length, enumDefinitionsObject.Enums.Sum(x => x.Members.Length), target);
 await File.WriteAllBytesAsync(target, bytes, CancellationToken.None);
 
 
-public record EnumDefinition(string Name, string BaseType, bool Flags, ImmutableArray<EnumMemberDefinition> Members);
+public record EnumDefinition(string Name, string BaseType, bool Flags, EnumMemberDefinition[] Members);
 
 public record EnumMemberDefinition(string Name, ulong Value);
 
-public record EnumDefinitions(ImmutableArray<EnumDefinition> Enums);
+public record EnumDefinitions(EnumDefinition[] Enums);
 
 [JsonSourceGenerationOptions(
     GenerationMode = JsonSourceGenerationMode.Serialization,
