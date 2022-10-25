@@ -13,6 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.ModInstaller", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.SteamHelper", "EasyCards.SteamHelper\EasyCards.SteamHelper.csproj", "{37435C8E-5446-445C-877D-A7EA0BE63D91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.EnumGenerator", "EasyCards.EnumGenerator\EasyCards.EnumGenerator.csproj", "{F813CDFB-541B-4F9C-AB13-382AF5A63E12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A314158B-7116-4B46-9744-A276A5FD239D} = {A314158B-7116-4B46-9744-A276A5FD239D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.EnumScanner", "EasyCards.EnumScanner\EasyCards.EnumScanner.csproj", "{A314158B-7116-4B46-9744-A276A5FD239D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +49,13 @@ Global
 		{37435C8E-5446-445C-877D-A7EA0BE63D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37435C8E-5446-445C-877D-A7EA0BE63D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37435C8E-5446-445C-877D-A7EA0BE63D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F813CDFB-541B-4F9C-AB13-382AF5A63E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F813CDFB-541B-4F9C-AB13-382AF5A63E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F813CDFB-541B-4F9C-AB13-382AF5A63E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F813CDFB-541B-4F9C-AB13-382AF5A63E12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A314158B-7116-4B46-9744-A276A5FD239D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A314158B-7116-4B46-9744-A276A5FD239D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A314158B-7116-4B46-9744-A276A5FD239D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A314158B-7116-4B46-9744-A276A5FD239D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
