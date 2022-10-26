@@ -10,4 +10,4 @@ namespace EasyCards.Bootstrap;
 [Register(typeof(DebugHelper), Scope.SingleInstance, typeof(IDebugHelper), typeof(IModuleBootstrap), typeof(IInputEventSubscriber))]
 [Register(typeof(CardLoader), Scope.SingleInstance, typeof(ICardLoader), typeof(IModuleBootstrap))]
 [Register(typeof(InputBootstrapper), Scope.SingleInstance, typeof(IModuleBootstrap))]
-public class BootstrapModule { }
+public sealed class BootstrapModule { }

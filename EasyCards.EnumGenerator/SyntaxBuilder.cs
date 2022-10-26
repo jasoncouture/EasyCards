@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EasyCards.EnumGenerator
 {
-    public class SyntaxBuilder
+    public sealed class SyntaxBuilder
     {
         private int _blockDepth = 0;
         private readonly StringBuilder _builder = new StringBuilder();

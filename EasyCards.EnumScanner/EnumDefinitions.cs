@@ -1,2 +1,2 @@
 #pragma warning disable SYSLIB1037
-public record EnumDefinitions(EnumDefinition[] Enums);
+public sealed record EnumDefinitions(EnumDefinition[] Enums);

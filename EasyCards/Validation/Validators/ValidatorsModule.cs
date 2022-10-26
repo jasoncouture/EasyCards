@@ -5,4 +5,4 @@ namespace EasyCards.Validation.Validators;
 
 [Register(typeof(NoOpValidator), Scope.SingleInstance, typeof(IValidator))]
 [Register(typeof(SpriteTextureValidator), Scope.SingleInstance, typeof(IValidator))]
-public class ValidatorsModule { }
+public sealed class ValidatorsModule { }

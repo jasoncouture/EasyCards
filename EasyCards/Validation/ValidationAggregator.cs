@@ -1,6 +1,6 @@
 namespace EasyCards.Validation;
 
-public class ValidationAggregator : IValidationAggregator
+public sealed class ValidationAggregator : IValidationAggregator
 {
     private readonly IValidator[] _validators;
 

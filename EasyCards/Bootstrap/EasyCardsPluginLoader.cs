@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EasyCards.Bootstrap;
 
-public class EasyCardsPluginLoader : IEasyCardsPluginLoader
+public sealed class EasyCardsPluginLoader : IEasyCardsPluginLoader
 {
     private readonly ILogger<EasyCardsPluginLoader> _logger;
     private readonly IModuleBootstrap[] _moduleBootstrappers;

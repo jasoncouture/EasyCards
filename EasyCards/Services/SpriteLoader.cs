@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace EasyCards.Services;
 
-public class SpriteLoader : ISpriteLoader
+public sealed class SpriteLoader : ISpriteLoader
 {
     private readonly IValidationAggregator _validationAggregator;
 

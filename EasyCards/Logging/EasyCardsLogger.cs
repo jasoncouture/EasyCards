@@ -6,7 +6,7 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace EasyCards.Logging;
 
-public class EasyCardsLogger : ILogger
+public sealed class EasyCardsLogger : ILogger
 {
     private readonly ManualLogSource _logSource;
     private readonly string _category;

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace EasyCards.Services;
 
-public class KeyBehaviour : MonoBehaviour
+public sealed class KeyBehaviour : MonoBehaviour
 {
     private readonly ImmutableArray<IInputEventSubscriber> _subscribers;
 

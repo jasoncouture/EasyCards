@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace EasyCards.Services;
 
-public class SpriteTextureValidator : ValidatorBase<Texture2D>
+public sealed class SpriteTextureValidator : ValidatorBase<Texture2D>
 {
     protected override ResultOrError<Texture2D> Validate(Texture2D? item)
     {

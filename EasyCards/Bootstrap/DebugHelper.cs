@@ -6,7 +6,7 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace EasyCards.Bootstrap;
 
-public class DebugHelper : IDebugHelper, IInputEventSubscriber
+public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 {
     private readonly ICardRepository _cardRepository;
 

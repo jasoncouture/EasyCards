@@ -5,4 +5,4 @@ namespace EasyCards.Validation;
 
 [Register(typeof(ValidationAggregator), Scope.SingleInstance, typeof(IValidationAggregator))]
 [RegisterModule(typeof(ValidatorsModule))]
-public class ValidationModule { }
+public sealed class ValidationModule { }

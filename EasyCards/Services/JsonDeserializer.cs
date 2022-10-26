@@ -3,7 +3,7 @@ using Native = System.Text.Json.JsonSerializer;
 
 namespace EasyCards.Services
 {
-    public class JsonDeserializer : IJsonDeserializer
+    public sealed class JsonDeserializer : IJsonDeserializer
     {
         public JsonDeserializer()
         {

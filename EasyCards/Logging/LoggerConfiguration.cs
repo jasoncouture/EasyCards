@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EasyCards.Logging;
 
-public class LoggerConfiguration : ILoggerConfiguration
+public sealed class LoggerConfiguration : ILoggerConfiguration
 {
     private readonly ConfigEntry<bool> _logCardDebuggingConfigEntry;
 

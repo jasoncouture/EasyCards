@@ -17,7 +17,7 @@ namespace EasyCards;
 [RegisterModule(typeof(ServicesModule))]
 [RegisterModule(typeof(CollectionsModule))]
 [RegisterModule(typeof(ValidationModule))]
-public partial class Container : IContainer<IEasyCardsPluginLoader>, IContainer<IInputEventSubscriber[]>
+public sealed partial class Container : IContainer<IEasyCardsPluginLoader>, IContainer<IInputEventSubscriber[]>
 {
     public static Container Instance { get; } = new();
     public T Resolve<T>()

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace EasyCards.UnitTests;
 
-public class ConversionTests
+public sealed class ConversionTests
 {
     [Fact]
     public void TemplateModifierTypeCanCastToModifierType()
