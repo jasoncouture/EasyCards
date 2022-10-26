@@ -43,6 +43,9 @@
         <Message Text="Deleting references and debug symbols from publish output" Importance="high"/>
         <Delete Files="@(FilesToDelete)"/>
     </Target>
+    <Target Name="GenerateJsonSchema" AfterTargets="Publish">
+        <Exec Command="$(ProjectDir)..\EasyCards.JsonSchemaGenerator\bin\$(Configuration)\net6.0\EasyCards.JsonSchemaGenerator $(PublishDir)Documentation\schema.json" ConsoleToMSBuild="true" />
+    </Target>
     <Target Name="CreateDataDirectory" AfterTargets="Publish">
         <Message Text="Creating Data directory" Importance="high"/>
         <MakeDir Directories="$(PublishDir)Data" ContinueOnError="true"/>

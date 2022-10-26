@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards", "EasyCards\EasyCards.csproj", "{78AFDD42-2E34-4D0D-9DE7-CCE3B3F54F91}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D235B756-D24E-4231-8C18-C61E172B7BCB} = {D235B756-D24E-4231-8C18-C61E172B7BCB}
+		{A314158B-7116-4B46-9744-A276A5FD239D} = {A314158B-7116-4B46-9744-A276A5FD239D}
+		{F813CDFB-541B-4F9C-AB13-382AF5A63E12} = {F813CDFB-541B-4F9C-AB13-382AF5A63E12}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.Models", "EasyCards.Models\EasyCards.Models.csproj", "{5D88B535-B6DE-4148-8E09-D999751F8FC4}"
 EndProject
@@ -19,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.EnumScanner", "EasyCards.EnumScanner\EasyCards.EnumScanner.csproj", "{A314158B-7116-4B46-9744-A276A5FD239D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.UnitTests", "EasyCards.UnitTests\EasyCards.UnitTests.csproj", "{91BC38B4-CA4E-49B6-991F-162B1EB3374A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.JsonSchemaGenerator", "EasyCards.JsonSchemaGenerator\EasyCards.JsonSchemaGenerator.csproj", "{D235B756-D24E-4231-8C18-C61E172B7BCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,5 +64,9 @@ Global
 		{91BC38B4-CA4E-49B6-991F-162B1EB3374A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91BC38B4-CA4E-49B6-991F-162B1EB3374A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91BC38B4-CA4E-49B6-991F-162B1EB3374A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
