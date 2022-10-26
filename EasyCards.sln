@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.EnumScanner", "Ea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.UnitTests", "EasyCards.UnitTests\EasyCards.UnitTests.csproj", "{91BC38B4-CA4E-49B6-991F-162B1EB3374A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.JsonSchemaGenerator", "EasyCards.JsonSchemaGenerator\EasyCards.JsonSchemaGenerator.csproj", "{D235B756-D24E-4231-8C18-C61E172B7BCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,5 +59,9 @@ Global
 		{91BC38B4-CA4E-49B6-991F-162B1EB3374A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91BC38B4-CA4E-49B6-991F-162B1EB3374A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91BC38B4-CA4E-49B6-991F-162B1EB3374A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D235B756-D24E-4231-8C18-C61E172B7BCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
