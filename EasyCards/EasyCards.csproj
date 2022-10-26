@@ -1,50 +1,50 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>EasyCards</AssemblyName>
-    <Description></Description>
-    <Version>1.0.7</Version>
-    <LangVersion>latest</LangVersion>
-    <RootNamespace>EasyCards</RootNamespace>
-    <PackageVersion>1.0.7</PackageVersion>
-    <Nullable>enable</Nullable>
-    <Authors>chendrak</Authors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>EasyCards</AssemblyName>
+        <Description></Description>
+        <Version>1.0.7</Version>
+        <LangVersion>latest</LangVersion>
+        <RootNamespace>EasyCards</RootNamespace>
+        <PackageVersion>1.0.7</PackageVersion>
+        <Nullable>enable</Nullable>
+        <Authors>chendrak</Authors>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" IncludeAssets="all" />
-    <PackageReference Include="StrongInject" Version="1.4.4" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Content to copy -->
-    <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
-  </ItemGroup>
-  
-  <Target Name="PostPublishCleanup" AfterTargets="Publish">
     <ItemGroup>
-      <!-- These are files that are unnecessary for the game, or are just not needed -->
-      <FilesToDelete Include="$(PublishDir)*Il2Cpp*.dll"/>
-      <FilesToDelete Include="$(PublishDir)*Unity*.dll"/>
-      <FilesToDelete Include="$(PublishDir)RogueGenesia.dll"/>
-      <FilesToDelete Include="$(PublishDir)ModGenesia*.dll"/>
-      <FilesToDelete Include="$(PublishDir)RogueGenesia*.dll"/>
-      <!-- This is skipped in debug configuration, to make debugging plugins easier -->
-      <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'" />
-      <FilesToDelete Include="$(PublishDir)*.deps.json" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*"/>
+        <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" IncludeAssets="all"/>
+        <PackageReference Include="StrongInject" Version="1.4.4"/>
     </ItemGroup>
-    <Message Text="Deleting references and debug symbols from publish output" Importance="high" />
-    <Delete Files="@(FilesToDelete)" />
-  </Target>
-  <Target Name="CreateDataDirectory" AfterTargets="Publish">
-    <Message Text="Creating Data directory" Importance="high" />
-    <MakeDir Directories="$(PublishDir)Data" ContinueOnError="true" />
-  </Target>
+
+    <ItemGroup>
+        <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Content to copy -->
+        <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always"/>
+    </ItemGroup>
+  
+    <Target Name="PostPublishCleanup" AfterTargets="Publish">
+        <ItemGroup>
+            <!-- These are files that are unnecessary for the game, or are just not needed -->
+            <FilesToDelete Include="$(PublishDir)*Il2Cpp*.dll"/>
+            <FilesToDelete Include="$(PublishDir)*Unity*.dll"/>
+            <FilesToDelete Include="$(PublishDir)RogueGenesia.dll"/>
+            <FilesToDelete Include="$(PublishDir)ModGenesia*.dll"/>
+            <FilesToDelete Include="$(PublishDir)RogueGenesia*.dll"/>
+            <!-- This is skipped in debug configuration, to make debugging plugins easier -->
+            <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'"/>
+            <FilesToDelete Include="$(PublishDir)*.deps.json"/>
+        </ItemGroup>
+        <Message Text="Deleting references and debug symbols from publish output" Importance="high"/>
+        <Delete Files="@(FilesToDelete)"/>
+    </Target>
+    <Target Name="CreateDataDirectory" AfterTargets="Publish">
+        <Message Text="Creating Data directory" Importance="high"/>
+        <MakeDir Directories="$(PublishDir)Data" ContinueOnError="true"/>
+    </Target>
 </Project>
