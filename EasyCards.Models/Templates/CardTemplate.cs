@@ -1,8 +1,19 @@
+using System.Text.Json.Serialization;
 using EasyCards.Models.Templates.Generated;
 namespace EasyCards.Models.Templates;
 
 public class CardTemplate
 {
+    private const string SchemaFileName = "schema.json";
+
+    [JsonPropertyName("$schema")]
+    public string Schema
+    {
+        get => SchemaFileName;
+        // ReSharper disable once ValueParameterNotUsed - This is only here to appease the schema generation gods.
+        set { }
+    }
+
     public string Name { get; set; }
     public string TexturePath { get; set; }
 
