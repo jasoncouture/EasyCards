@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" PrivateAssets="all" />
+        <PackageReference Include="System.Text.Json" Version="6.0.6" />
+    </ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+        <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+    </ItemGroup>
+    <Target Name="UpdateEnumJson" BeforeTargets="AfterResolveReferences">
+        <Exec Command="$(ProjectDir)..\EasyCards.EnumScanner\bin\$(Configuration)\net6.0\EasyCards.EnumScanner $(ProjectDir)$(BaseIntermediateOutputPath)scanned-enums.generated" ConsoleToMSBuild="true" />
+        <!-- This item group is here, so that it gets evaluated _after_ the exec command above. -->
+        <!-- If this is not here, nested in this target, after exec the project will fail to build on the first build -->
+        <ItemGroup>
+            <None Remove="$(ProjectDir)$(BaseIntermediateOutputPath)*.generated" />
+            <EmbeddedResource Include="$(ProjectDir)$(BaseIntermediateOutputPath)*.generated" Visible="false" />
+        </ItemGroup>
+    </Target>
+</Project>

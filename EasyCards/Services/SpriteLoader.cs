@@ -1,20 +1,28 @@
 using System.IO;
-using BepInEx.Logging;
+using Microsoft.Extensions.Logging;
 using UnityEngine;
 
-namespace EasyCards.Helpers;
+namespace EasyCards.Services;
 
-public static class SpriteHelper
+public class SpriteLoader : ISpriteLoader
 {
-    private static ManualLogSource Logger => EasyCards.Instance.Log;
-    private static Texture2D LoadPNGIntoTexture(string filePath) {
+    public SpriteLoader(ILogger<SpriteLoader> logger)
+    {
+        Logger = logger;
+    }
+
+    private ILogger<SpriteLoader> Logger { get; }
+
+    private Texture2D LoadPNGIntoTexture(string filePath)
+    {
         Texture2D tex = null;
 
-        if (File.Exists(filePath)) {
+        if (File.Exists(filePath))
+        {
             var fileData = File.ReadAllBytes(filePath);
             tex = new Texture2D(2, 2, TextureFormat.RGBA32, true, false);
             ImageConversion.LoadImage(tex, fileData);
-            
+
             if (tex != null)
             {
                 // Set FilterMode so the images don't end up blurry
@@ -22,14 +30,14 @@ public static class SpriteHelper
             }
             else
             {
-                Logger.LogInfo($"Texture couldn't be loaded: {filePath}");
+                Logger.LogWarning($"Texture couldn't be loaded: {filePath}");
             }
         }
 
         return tex;
     }
 
-    public static Sprite LoadSpriteFromFile(string filePath)
+    public Sprite LoadSprite(string filePath)
     {
         var tex = LoadPNGIntoTexture(filePath);
         return Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);

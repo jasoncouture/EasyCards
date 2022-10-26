@@ -10,9 +10,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [ "Debug", "Release" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -31,16 +28,20 @@ jobs:
             ${{ runner.os }}-nuget-
       - name: Restore dependencies
         run: dotnet restore
-      - name: "Build configuration: ${{ matrix.configuration }}"
-        run: dotnet build -c ${{ matrix.configuration }} --no-restore --nologo
-      - name: "Publish configuration: ${{ matrix.configuration }}"
-        run: dotnet publish -c ${{ matrix.configuration }} --no-build --nologo -o publish_output EasyCards
-      - name: "Zip binaries for configuration: ${{ matrix.configuration }}"
-        run: pushd publish_output && zip ../EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip -r ./; popd
-      - name: Upload EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
+      - name: Run unit tests
+        run: | 
+          dotnet build --nologo
+          dotnet test --no-restore --nologo
+      - name: "Build configuration: Release"
+        run: dotnet build -c Release --nologo
+      - name: "Publish configuration: Release"
+        run: dotnet publish -c Release --no-build --nologo -o publish_output EasyCards
+      - name: "Zip binaries for configuration: Release"
+        run: pushd publish_output && zip ../EasyCards-Release-${{github.run_number}}.zip -r ./; popd
+      - name: Upload EasyCards-Release-${{github.run_number}}.zip
         uses: actions/upload-artifact@v3
         with:
-          name: EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
-          path: EasyCards-${{ matrix.configuration }}-${{github.run_number}}.zip
+          name: EasyCards-Release-${{github.run_number}}.zip
+          path: EasyCards-Release-${{github.run_number}}.zip
         
         

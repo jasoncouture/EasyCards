@@ -1,3 +1,4 @@
+using EasyCards.Models.Templates.Generated;
 namespace EasyCards.Models.Templates;
 
 public class CardTemplate
