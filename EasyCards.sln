@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards", "EasyCards\EasyCards.csproj", "{78AFDD42-2E34-4D0D-9DE7-CCE3B3F54F91}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D235B756-D24E-4231-8C18-C61E172B7BCB} = {D235B756-D24E-4231-8C18-C61E172B7BCB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyCards.Models", "EasyCards.Models\EasyCards.Models.csproj", "{5D88B535-B6DE-4148-8E09-D999751F8FC4}"
 EndProject
