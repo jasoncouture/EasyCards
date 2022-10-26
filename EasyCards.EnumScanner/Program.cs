@@ -19,7 +19,7 @@ foreach (var @enum in enums)
     var enumNamesAndValues = enumNames.Zip(rawValues.Cast<object>().Select(Convert.ToUInt64));
     var isFlags = @enum.GetCustomAttribute<FlagsAttribute>() is not null;
     var definition = new EnumDefinition(name, baseType.Name, isFlags,
-        enumNamesAndValues.Select(keyValuePair => new EnumMemberDefinition(keyValuePair.First, keyValuePair.Second))
+        enumNamesAndValues.Where(i => !i.First.StartsWith("PLACEHOLDER", StringComparison.OrdinalIgnoreCase)).Select(keyValuePair => new EnumMemberDefinition(keyValuePair.First, keyValuePair.Second))
             .ToArray());
     enumDefinitionList.Add(definition);
     Console.WriteLine(" Done! ({0} items processed)", definition.Members.Length);
