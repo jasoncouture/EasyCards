@@ -20,7 +20,7 @@ public partial class Container : IContainer<IEasyCardsPluginLoader>, IContainer<
     public static Container Instance { get; } = new();
     public T Resolve<T>()
     {
-        return ((IContainer<T>)this).Resolve().Value;
+        return ((IContainer<T>)(object)this).Resolve().Value;
     }
 
     [Factory]

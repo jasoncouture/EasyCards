@@ -8,6 +8,7 @@
     <LangVersion>latest</LangVersion>
     <RootNamespace>EasyCards</RootNamespace>
     <PackageVersion>1.0.7</PackageVersion>
+    <Nullable>enable</Nullable>
     <Authors>chendrak</Authors>
   </PropertyGroup>
 
