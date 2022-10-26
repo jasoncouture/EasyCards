@@ -3,7 +3,7 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Services;
 
-public class CardRepository : ICardRepository
+public sealed class CardRepository : ICardRepository
 {
     private ImmutableArray<SoulCardScriptableObject>? _cardCache;
 

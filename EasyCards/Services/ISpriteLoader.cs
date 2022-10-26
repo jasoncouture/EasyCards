@@ -4,5 +4,5 @@ namespace EasyCards.Services;
 
 public interface ISpriteLoader
 {
-    Sprite LoadSprite(string filePath);
+    Sprite? LoadSprite(string filePath);
 }

@@ -12,7 +12,7 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Bootstrap;
 
-public class CardLoader : ICardLoader
+public sealed class CardLoader : ICardLoader
 {
     public CardLoader(ILogger<CardLoader> logger, IJsonDeserializer jsonDeserializer, IDebugHelper debugHelper, ISpriteLoader spriteLoader, ICardRepository cardRepository)
     {

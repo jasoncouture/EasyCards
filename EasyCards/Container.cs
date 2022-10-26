@@ -4,6 +4,7 @@ using EasyCards.Bootstrap;
 using EasyCards.Helpers;
 using EasyCards.Logging;
 using EasyCards.Services;
+using EasyCards.Validation;
 using Il2CppSystem.Collections.Generic;
 using Il2CppSystem.Linq;
 using StrongInject;
@@ -15,12 +16,13 @@ namespace EasyCards;
 [RegisterModule(typeof(BootstrapModule))]
 [RegisterModule(typeof(ServicesModule))]
 [RegisterModule(typeof(CollectionsModule))]
-public partial class Container : IContainer<IEasyCardsPluginLoader>, IContainer<IInputEventSubscriber[]>
+[RegisterModule(typeof(ValidationModule))]
+public sealed partial class Container : IContainer<IEasyCardsPluginLoader>, IContainer<IInputEventSubscriber[]>
 {
     public static Container Instance { get; } = new();
     public T Resolve<T>()
     {
-        return ((IContainer<T>)this).Resolve().Value;
+        return ((IContainer<T>)(object)this).Resolve().Value;
     }
 
     [Factory]
