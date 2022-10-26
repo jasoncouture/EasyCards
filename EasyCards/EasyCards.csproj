@@ -27,10 +27,16 @@
     <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
   </ItemGroup>
   
-  <Target Name="PostPublishCleanup" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="PostPublishCleanup" AfterTargets="Publish">
     <ItemGroup>
-      <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName)*.dll" />
-      <FilesToDelete Include="$(PublishDir)*.pdb" />
+      <!-- These are files that are unnecessary for the game, or are just not needed -->
+      <FilesToDelete Include="$(PublishDir)*Il2Cpp*.dll"/>
+      <FilesToDelete Include="$(PublishDir)*Unity*.dll"/>
+      <FilesToDelete Include="$(PublishDir)RogueGenesia.dll"/>
+      <FilesToDelete Include="$(PublishDir)ModGenesia*.dll"/>
+      <FilesToDelete Include="$(PublishDir)RogueGenesia*.dll"/>
+      <!-- This is skipped in debug configuration, to make debugging plugins easier -->
+      <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'" />
       <FilesToDelete Include="$(PublishDir)*.deps.json" />
     </ItemGroup>
     <Message Text="Deleting references and debug symbols from publish output" Importance="high" />
