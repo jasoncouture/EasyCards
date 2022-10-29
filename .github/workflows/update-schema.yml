@@ -1,0 +1,49 @@
+name: Update schema
+
+on:
+  pull_request:
+    branches: [ "master" ]
+  push:
+    branches: [ "master" ]
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Pull Cached NuGet Restore Data
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Restore dependencies
+        run: |
+          dotnet restore
+      - name: Build tools
+        run: | 
+          dotnet build --nologo  /p:WarningLevel=0 
+      - name: Generate schema file
+        run: |
+          dotnet run --project EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.json"
+          dotnet run --project EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.${{ github.run_number }}.json"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        with:
+          commit_message: Card schema update
+          commit_user_name: GitHub Actions Schema Generator
+      - name: Deploy github pages
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
