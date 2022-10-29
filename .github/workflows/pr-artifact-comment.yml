@@ -5,7 +5,9 @@ on:
       - "Build release zips"
     types:
       - completed
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   artifacts-url-comments:
     name: add artifact links to pull request and related issues job
