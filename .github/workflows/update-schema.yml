@@ -1,6 +1,8 @@
 name: Build release zips
 
-on:  
+on:
+  pull_request:
+    branches: [ "master" ]
   push:
     branches: [ "master" ]
     tags:
@@ -35,10 +37,12 @@ jobs:
           dotnet run EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.json"
           dotnet run EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.${{ github.run_number }}.json"
       - uses: stefanzweifel/git-auto-commit-action@v4
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         with:
           commit_message: Card schema update
           commit_user_name: GitHub Actions Schema Generator
       - name: Deploy github pages
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
