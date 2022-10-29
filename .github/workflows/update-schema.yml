@@ -34,8 +34,8 @@ jobs:
           dotnet build --nologo  /p:WarningLevel=0 
       - name: Generate schema file
         run: |
-          dotnet run EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.json"
-          dotnet run EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.${{ github.run_number }}.json"
+          dotnet run --project EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.json"
+          dotnet run --project EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.${{ github.run_number }}.json"
       - uses: stefanzweifel/git-auto-commit-action@v4
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         with:
