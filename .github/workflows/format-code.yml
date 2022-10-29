@@ -1,0 +1,49 @@
+name: Auto-Format code
+
+on:
+  pull_request:
+    branches: [ "master" ]
+  push:
+    branches: [ "master" ]
+    tags:
+      - '*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Pull Cached NuGet Restore Data
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      - name: Format all code and push
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          dotnet format
+      - name: Ensure code is formatted correctly
+        # This will notify on the PR that formatting is needed, without blocking the PR if it requires passing status checks.
+        # This works because dotnet format --verify-no-changes returns non-zero when formatting is needed, and GH picks this up as a failure.
+        continue-on-error: true 
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: |
+          dotnet format --verify-no-changes
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: ${{ github.ref == 'refs/heads/master' }} 
+        with:
+          commit_message: Automatic code formatting
+          status_options: '--untracked-files=no'
+          commit_user_name: GitHub Actions Code Formatter

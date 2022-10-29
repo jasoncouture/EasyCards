@@ -1,15 +1,15 @@
 name: Update schema
 
 on:
-  pull_request:
-    branches: [ "master" ]
   push:
     branches: [ "master" ]
     tags:
       - '*'
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -50,8 +50,8 @@ jobs:
         run: |
           dotnet restore
       - name: Build tools
-        run: | 
-          dotnet build --nologo  /p:WarningLevel=0 
+        run: |
+          dotnet build --nologo  /p:WarningLevel=0
       - name: Generate schema file
         run: |
           dotnet run --project EasyCards.JsonSchemaGenerator -- "$(pwd)/docs/schema.json"
