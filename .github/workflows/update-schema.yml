@@ -7,10 +7,16 @@ on:
     branches: [ "master" ]
     tags:
       - '*'
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
     steps:
       - uses: actions/checkout@v3
         with:
@@ -41,9 +47,10 @@ jobs:
         with:
           commit_message: Card schema update
           commit_user_name: GitHub Actions Schema Generator
-      - name: Deploy github pages
-        if: ${{ github.ref == 'refs/heads/master' }}
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: actions/upload-pages-artifact@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          path: "docs/"
+          retention-days: 1
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@main
