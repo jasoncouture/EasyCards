@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text.Json;
 using EasyCards.EnumGenerator.EnumScannerModels;
 
@@ -14,7 +14,8 @@ namespace EasyCards.EnumGenerator
             using (var manifestStream =
                    typeof(EnumScanResultsLoader).Assembly.GetManifestResourceStream(jsonDataResourceName))
             {
-                if (manifestStream == null) return null;
+                if (manifestStream == null)
+                    return null;
                 var result = JsonSerializer.Deserialize<EnumDefinitions>(manifestStream, new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = true

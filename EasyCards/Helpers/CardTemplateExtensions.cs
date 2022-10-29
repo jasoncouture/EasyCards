@@ -10,9 +10,9 @@ namespace EasyCards.Helpers;
 
 public static class CardTemplateExtensions
 {
-    public  static StatsModifier ToStatsModifier(this StatRequirementTemplate template)
+    public static StatsModifier ToStatsModifier(this StatRequirementTemplate template)
     {
-        if(Enum.TryParse<StatRequirementType>(template.RequirementType, true, out _))
+        if (Enum.TryParse<StatRequirementType>(template.RequirementType, true, out _))
         {
             var statsModifier = new StatsModifier();
 
@@ -29,14 +29,14 @@ public static class CardTemplateExtensions
             {
                 statsModifier.ModifiersList.Add(statModifier);
             }
-            
+
             return statsModifier;
         }
 
         EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Values values are: {System.Enum.GetNames(typeof(RequirementTemplate))}");
         return null;
     }
-    public static StatModifier ToStatModifier( this StatRequirement template)
+    public static StatModifier ToStatModifier(this StatRequirement template)
     {
         if (Enum.TryParse<StatRequirementType>(template.Name, true, out _))
         {
@@ -57,7 +57,7 @@ public static class CardTemplateExtensions
         EasyCards.Instance.Log.LogWarning($"{template.Name} is not valid a valid stat name!");
         return null;
     }
-    
+
     public static SCSORequirementList ToRequirementList(this RequirementTemplate template)
     {
 
@@ -71,7 +71,7 @@ public static class CardTemplateExtensions
         StatsModifier statRequirements = null;
 
         var isMinRequirement = true;
-        
+
         if (template.Stats != null)
         {
             statRequirements = template.Stats.ToStatsModifier();
@@ -79,7 +79,7 @@ public static class CardTemplateExtensions
         }
 
         var requirementList = ModGenesia.ModGenesia.MakeCardRequirement(cardRequirements?.ToIl2CppReferenceArray(), statRequirements, isMinRequirement);
-        
+
         return requirementList;
     }
     public static ModCardRequirement ToModCardRequirement(this CardRequirementTemplate template)
@@ -103,7 +103,7 @@ public static class CardTemplateExtensions
 
         return statsMod;
     }
-    
+
     /// <summary>
     /// Converts this ModifierTemplate into something the game can understand.
     /// </summary>

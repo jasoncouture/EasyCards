@@ -17,7 +17,7 @@ namespace EasyCards.Services
             };
             Options.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
         }
-        
+
 
         public T Deserialize<T>(string json)
         {

@@ -7,11 +7,11 @@ namespace EasyCards.Helpers;
 
 public static class Localization
 {
-    private static ManualLogSource Logger => EasyCards.Instance.Log;  
+    private static ManualLogSource Logger => EasyCards.Instance.Log;
     private static List<LocalizationData> GetTranslations(Dictionary<string, string> translations)
     {
         var result = new List<LocalizationData>();
-        
+
         foreach (var (localizationKey, translation) in translations)
         {
             var locale = GetLocaleForKey(localizationKey);
@@ -48,14 +48,15 @@ public static class Localization
         return GetTranslations(cardTemplate.DescriptionLocalization);
     }
 
-    public static void PostProcessDescriptions(Dictionary<string,SoulCardScriptableObject> allCards, Dictionary<string,CardTemplate> addedCards)
-    { 
+    public static void PostProcessDescriptions(Dictionary<string, SoulCardScriptableObject> allCards, Dictionary<string, CardTemplate> addedCards)
+    {
         Logger.LogInfo($"=== Post processing descriptions for {addedCards.Count} cards ===");
 
         foreach (var cardName in addedCards.Keys)
         {
             var cardTemplate = addedCards[cardName];
-            if (cardTemplate.DescriptionLocalization.Count == 0) continue;
+            if (cardTemplate.DescriptionLocalization.Count == 0)
+                continue;
 
             var cardScso = allCards[cardName];
             var translations = GetDescriptionTranslations(cardTemplate);
@@ -67,7 +68,7 @@ public static class Localization
             }
         }
     }
-    
+
     private static UnityEngine.Localization.Locale GetLocaleForKey(string localizationKey)
     {
         foreach (var locale in ModGenesia.ModGenesia.GetLocales())

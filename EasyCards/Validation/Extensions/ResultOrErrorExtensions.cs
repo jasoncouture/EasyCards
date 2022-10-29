@@ -7,7 +7,8 @@ public static class ResultOrErrorExtensions
     public static bool LogValidationErrors<T>(this ILogger logger, ResultOrError<T> resultOrError)
     {
         var isValid = resultOrError.HasResult;
-        if (!logger.IsEnabled(LogLevel.Error) && !logger.IsEnabled(LogLevel.Warning)) return isValid;
+        if (!logger.IsEnabled(LogLevel.Error) && !logger.IsEnabled(LogLevel.Warning))
+            return isValid;
         foreach (var error in resultOrError.Errors)
         {
             logger.LogValidationError(error);
@@ -18,7 +19,7 @@ public static class ResultOrErrorExtensions
 
     public static void LogValidationError(this ILogger logger, ValidationError validationError)
     {
-        if(validationError.Fatal)
+        if (validationError.Fatal)
             logger.LogValidationErrorAsError(validationError);
         else
             logger.LogValidationErrorAsWarning(validationError);

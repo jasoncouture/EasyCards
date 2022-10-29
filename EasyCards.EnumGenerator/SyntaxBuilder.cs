@@ -60,7 +60,8 @@ namespace EasyCards.EnumGenerator
         }
         public SyntaxBuilder EndBlock()
         {
-            if (_blockDepth == 0) throw new InvalidOperationException("No blocks are in progress");
+            if (_blockDepth == 0)
+                throw new InvalidOperationException("No blocks are in progress");
             _builder.AppendLine("}");
             _blockDepth--;
             return this;
@@ -93,7 +94,7 @@ namespace EasyCards.EnumGenerator
             _builder.AppendLine();
             return this;
         }
-            
+
         public override string ToString()
         {
             return _builder.ToString();

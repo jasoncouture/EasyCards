@@ -78,7 +78,8 @@ namespace EasyCards.EnumGenerator
                 var builder = DefineEnum(context, enumDefinition, enumTargetName, visibilityModifier);
                 builder?.WithClassName(enumTargetName)
                     .FinalizeDeclaration(targetNamespace, "System")
-                    .AddSource(context);;
+                    .AddSource(context);
+                ;
             }
         }
 
@@ -99,7 +100,7 @@ namespace EasyCards.EnumGenerator
             {
                 declaration.AppendLine("[Flags]");
             }
-            
+
             declaration.BeginBlock($"{visibilityModifier} enum {enumTargetName} : {baseType.Name}");
             bool first = true;
             foreach (var enumMember in enumDefinition.Members)

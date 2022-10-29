@@ -28,7 +28,7 @@ namespace EasyCards.EnumGenerator
             context.AddSource($"{builder.ClassName}.g.cs", builder.EndAllBlocks().Format().ToString());
         }
         public static SyntaxBuilder FinalizeDeclaration(
-            this SyntaxBuilder builder, 
+            this SyntaxBuilder builder,
             string @namespace,
             params string[] usingStatements
             )

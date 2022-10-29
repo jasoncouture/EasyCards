@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using EasyCards.Bootstrap;

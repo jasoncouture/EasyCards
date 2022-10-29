@@ -20,7 +20,8 @@ public sealed class KeyBehaviour : MonoBehaviour
         {
             for (var y = 0; y < keyControls.Length; y++)
             {
-                if (!_subscribers[x].HandlesKey(keyControls[y].keyCode)) continue;
+                if (!_subscribers[x].HandlesKey(keyControls[y].keyCode))
+                    continue;
                 _subscribers[x].OnInputEvent(keyControls[y].keyCode);
             }
         }

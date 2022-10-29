@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 namespace EasyCards.EnumGenerator
 {
     [Generator]
-    public class EnumExtensionsGenerator : ISourceGenerator 
+    public class EnumExtensionsGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -18,7 +18,7 @@ namespace EasyCards.EnumGenerator
                                   context.Compilation.AssemblyName;
             var enumNamePrefix = context.Compilation.Assembly.GetAttributeValue("EnumPrefix") ?? string.Empty;
             var enumNamePostfix = context.Compilation.Assembly.GetAttributeValue("EnumPostfix") ?? string.Empty;
-            
+
             var visibilityModifier = "public";
             var declaration = new SyntaxBuilder();
 
@@ -33,14 +33,14 @@ namespace EasyCards.EnumGenerator
                 .FinalizeDeclaration(targetNamespace, "System")
                 .AddSource(context);
         }
-        
+
         private SyntaxBuilder DefineEnumExtensionMethod(EnumDefinition enumDefinition,
             string enumNamePrefix, string enumNamePostfix, SyntaxBuilder declaration)
         {
             var namespaces = new HashSet<string>();
             namespaces.Add("System");
 
-            
+
             var enumTargetName = $"{enumNamePrefix}{enumDefinition.Name}{enumNamePostfix}";
             declaration
                 .BeginBlock($"public static T CastTo<T>(this {enumTargetName} val) where T : struct")

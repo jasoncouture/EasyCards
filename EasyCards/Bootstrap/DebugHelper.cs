@@ -24,7 +24,8 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 
     private void OnDebugLogKeyPressed()
     {
-        if (!Logger.IsEnabled(LogLevel.Debug)) return;
+        if (!Logger.IsEnabled(LogLevel.Debug))
+            return;
         var allCards = _cardRepository.GetAllCards();
 
         Logger.LogInformation("=== Listing All Cards ===");
@@ -70,7 +71,8 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
     public bool Enabled => Logger.IsEnabled(LogLevel.Debug);
     public void LogRequirements(SCSORequirementList requirementList, string prefix = "\t")
     {
-        if (requirementList == null) return;
+        if (requirementList == null)
+            return;
 
         var cardRequirements = requirementList.CardRequirement;
         if (cardRequirements is { Count: > 0 })

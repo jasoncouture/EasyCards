@@ -9,5 +9,5 @@ public sealed class CardRepository : ICardRepository
 
     public ImmutableArray<SoulCardScriptableObject> GetAllCards() =>
         _cardCache ??= GameData.GetAllSoulBonus().ToImmutableArray();
-    
+
 }

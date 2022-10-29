@@ -15,7 +15,8 @@ public sealed class ValidationAggregator : IValidationAggregator
         foreach (var validator in _validators)
         {
             var result = validator.TryValidate(item);
-            if (result.HasResult && finalResult.HasResult && result.Errors.Length == 0) continue;
+            if (result.HasResult && finalResult.HasResult && result.Errors.Length == 0)
+                continue;
             finalResult = ResultOrError<T>.Merge(finalResult, result);
         }
 

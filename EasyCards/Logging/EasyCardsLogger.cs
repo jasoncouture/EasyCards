@@ -22,7 +22,8 @@ public sealed class EasyCardsLogger : ILogger
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
         Func<TState, Exception, string> formatter)
     {
-        if (!IsEnabled(logLevel)) return;
+        if (!IsEnabled(logLevel))
+            return;
         _logSource.Log(ConvertLogLevel(logLevel), formatter.Invoke(state, exception));
     }
 
