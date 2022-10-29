@@ -49,14 +49,14 @@ jobs:
       - name: Restore dependencies
         run: |
           dotnet restore
-      - name: Build tools
+      - name: Restore tools
         run: |
-          dotnet build --nologo  /p:WarningLevel=0
+          dotnet tool restore
       - name: Format code
         continue-on-error: true
         run: |
-          dotnet format
-      - name: Build again
+          dotnet dotnet-format
+      - name: Build local tools
         run: |
           dotnet build --nologo  /p:WarningLevel=0
       - name: Generate schema file
