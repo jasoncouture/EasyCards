@@ -27,10 +27,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+          dotnet restore
       - name: Build tools
         run: | 
-# This stops multiple warnings from appearing on commits/files. Only the main build will produce the warnings.
           dotnet build --nologo  /p:WarningLevel=0 
       - name: Generate schema file
         run: |
